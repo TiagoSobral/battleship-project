@@ -19,6 +19,13 @@ export class gameBoard {
 			queue.splice(0, 1);
 		}
 	}
+
+	receiveAttack(coordinates) {
+		let [row, column] = coordinates;
+		let squareHit = this.board[row][column];
+		if (typeof squareHit.value == 'object') return squareHit.value.hit();
+		return (squareHit.value = 'X');
+	}
 }
 
 function createBoard() {

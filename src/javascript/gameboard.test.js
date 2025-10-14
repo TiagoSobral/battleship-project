@@ -36,6 +36,16 @@ describe('Game Board', () => {
 	it("Doesn't allow used squares", () => {
 		expect(() => newBoard.addShip([0, 0], [3, 0], 3)).toThrow();
 	});
+
+	it('Hits a ship', () => {
+		newBoard.receiveAttack([0, 0]);
+		expect(newBoard.board[0][0].value.timesHit).toBe(1);
+	});
+
+	it('Hits water and records', () => {
+		newBoard.receiveAttack([9, 9]);
+		expect(newBoard.board[9][9].value).toBe('X');
+	});
 });
 
 /* Note to self:
@@ -44,4 +54,7 @@ describe('Game Board', () => {
 info: to guarantee the test checks, i need to add two boats with similar coordinates 
 and if the values change it means the it didn't have into consideration the boat that was
 already there.
+
+
+- perhaps add a second board and record if my play was a hit or a miss.
 */

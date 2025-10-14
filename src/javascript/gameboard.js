@@ -9,6 +9,7 @@ export class gameBoard {
 		let queue = [board[startX][startY]];
 		let direction = boatDirection(startCord, endCord);
 		for (let i = 1; i <= boatSize; i++) {
+			squareUsed(queue[0]);
 			queue[0].value = new Ship(5);
 			if (direction == 'horizontal') {
 				queue.push(board[startX][startY + i]);
@@ -39,4 +40,9 @@ function boatDirection(startCord, endCord) {
 
 	if (startX == endX) return 'horizontal';
 	return 'vertical';
+}
+
+function squareUsed(square) {
+	if (square.value != '')
+		throw new Error('Invalid Play, some squares or a square is being used!');
 }

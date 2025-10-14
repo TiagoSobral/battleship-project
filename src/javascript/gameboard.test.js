@@ -32,4 +32,16 @@ describe('Game Board', () => {
 			});
 		}
 	});
+
+	it("Doesn't allow used squares", () => {
+		expect(() => newBoard.addShip([0, 0], [3, 0], 3)).toThrow();
+	});
 });
+
+/* Note to self:
+- cannot have duplicates, so i need to test if there are duplicates
+
+info: to guarantee the test checks, i need to add two boats with similar coordinates 
+and if the values change it means the it didn't have into consideration the boat that was
+already there.
+*/

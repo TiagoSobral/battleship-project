@@ -12,7 +12,7 @@ describe('Game Board', () => {
 	});
 
 	it('Adds ship horizontally', () => {
-		newBoard.addShip([0, 0], [0, 5], 5);
+		newBoard.addShip([0, 0], [0, 4], 5);
 		for (let i = 0; i < 5; i++) {
 			expect(newBoard.board[0][i].value).toEqual({
 				length: 5,
@@ -23,8 +23,8 @@ describe('Game Board', () => {
 	});
 
 	it('Adds ship vertically', () => {
-		newBoard.addShip([1, 0], [5, 0], 5);
-		for (let i = 0; i < 5; i++) {
+		newBoard.addShip([1, 0], [3, 0], 3);
+		for (let i = 0; i < 3; i++) {
 			expect(newBoard.board[1 + i][0].value).toEqual({
 				length: 5,
 				timesHit: 0,
@@ -37,9 +37,18 @@ describe('Game Board', () => {
 		expect(() => newBoard.addShip([0, 0], [3, 0], 3)).toThrow();
 	});
 
+	it("Doesn't accept wrong input", () => {
+		// checks if throws error out of bounds & if coordinates don't match ship size
+		expect(() => newBoard.addShip([1, 0], [6, 0], 6)).toThrow();
+		expect(() => newBoard.addShip([8, 0], [10, 0], 2)).toThrow();
+		expect(() => newBoard.addShip([7, 0], [9, 0], 1)).toThrow();
+	});
+
 	it('Hits a ship', () => {
 		newBoard.receiveAttack([0, 0]);
 		expect(newBoard.board[0][0].value.timesHit).toBe(1);
+		// checks if the the squares that belong to the ship record the hit.
+		expect(newBoard.board[0][4].value.timesHit).toBe(1);
 	});
 
 	it('Hits water and records', () => {

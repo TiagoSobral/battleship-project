@@ -5,7 +5,7 @@ export class gameBoard {
 
 	addShip(startCord, endCord, boatSize) {
 		invalidInput(startCord, endCord, boatSize);
-		let newShip = new Ship(5);
+		let newShip = new Ship(boatSize);
 		let [startX, startY] = startCord;
 		let board = this.board;
 		let queue = [board[startX][startY]];
@@ -25,8 +25,11 @@ export class gameBoard {
 	receiveAttack(coordinates) {
 		let [row, column] = coordinates;
 		let squareHit = this.board[row][column];
-		if (typeof squareHit.value == 'object') return squareHit.value.hit();
-		return (squareHit.value = 'X');
+		if (typeof squareHit.value == 'object') {
+			squareHit.value.hit();
+		} else {
+			squareHit.value = 'X';
+		}
 	}
 }
 

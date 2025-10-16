@@ -24,9 +24,9 @@ describe('Game Board', () => {
 
 	it('Adds ship vertically', () => {
 		newBoard.addShip([1, 0], [3, 0], 3);
-		for (let i = 0; i < 3; i++) {
-			expect(newBoard.board[1 + i][0].value).toEqual({
-				length: 5,
+		for (let i = 1; i <= 3; i++) {
+			expect(newBoard.board[i][0].value).toEqual({
+				length: 3,
 				timesHit: 0,
 				sunk: false,
 			});

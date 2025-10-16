@@ -2,6 +2,7 @@ import { Ship } from './ships.js';
 
 export class gameBoard {
 	board = createBoard();
+	#boats = [];
 
 	addShip(startCord, endCord, boatSize) {
 		invalidInput(startCord, endCord, boatSize);
@@ -20,6 +21,7 @@ export class gameBoard {
 			}
 			queue.splice(0, 1);
 		}
+		this.#boats.push(newShip);
 	}
 
 	receiveAttack(coordinates) {
@@ -30,6 +32,12 @@ export class gameBoard {
 		} else {
 			squareHit.value = 'X';
 		}
+	}
+
+	allSunk() {
+		let isGameOver = this.#boats.every((val) => val.isSunk() == true);
+		if (isGameOver) return 'Game Over!';
+		return isGameOver;
 	}
 }
 

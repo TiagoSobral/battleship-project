@@ -57,11 +57,12 @@ describe('Game Board', () => {
 	});
 
 	it('Game Over', () => {
-		for (let i = 1; i < 4; i++) {
-			newBoard.receiveAttack([0, i]);
-			newBoard.receiveAttack([i, 0]);
+		for (let i = 1; i <= 4; i++) {
+			newBoard.receiveAttack([0, 0 + i]);
 		}
-		newBoard.receiveAttack([0, 4]);
+		for (let i = 0; i < 3; i++) {
+			newBoard.receiveAttack([7 + i, 2]);
+		}
 		/* the last hit on the last boat standing should return Game Over */
 		expect(newBoard.allSunk()).toBe('Game Over!');
 	});

@@ -11,13 +11,17 @@ export class gameBoard {
 		let board = this.board;
 		let queue = [board[startX][startY]];
 		let direction = boatDirection(startCord, endCord);
-		for (let i = 1; i <= boatSize; i++) {
+		while (queue.length != 0) {
 			squareUsed(queue[0]);
 			queue[0].value = newShip;
-			if (direction == 'horizontal') {
-				queue.push(board[startX][startY + i]);
-			} else {
-				queue.push(board[startX + i][startY]);
+			if (JSON.stringify([startX, startY]) != JSON.stringify(endCord)) {
+				if (direction == 'horizontal') {
+					startY = startY + 1;
+					queue.push(board[startX][startY]);
+				} else {
+					startX = startX + 1;
+					queue.push(board[startX][startY]);
+				}
 			}
 			queue.splice(0, 1);
 		}

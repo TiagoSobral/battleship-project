@@ -1,4 +1,4 @@
 import '../css/style.css';
-import { createDom } from './UI.js';
+import { populateBoards } from './gamecontroller.js';
 
-createDom();
+populateBoards();

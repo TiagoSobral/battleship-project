@@ -14,7 +14,7 @@ describe('Game Board', () => {
 	it('Adds ship horizontally', () => {
 		newBoard.addShip([0, 0], [0, 4], 5);
 		for (let i = 0; i < 5; i++) {
-			expect(newBoard.board[0][i].value).toEqual({
+			expect(newBoard.board[0][0 + i].value).toEqual({
 				length: 5,
 				timesHit: 0,
 				sunk: false,
@@ -23,9 +23,9 @@ describe('Game Board', () => {
 	});
 
 	it('Adds ship vertically', () => {
-		newBoard.addShip([1, 0], [3, 0], 3);
-		for (let i = 1; i <= 3; i++) {
-			expect(newBoard.board[i][0].value).toEqual({
+		newBoard.addShip([7, 2], [9, 2], 3);
+		for (let i = 0; i < 3; i++) {
+			expect(newBoard.board[7 + i][2].value).toEqual({
 				length: 3,
 				timesHit: 0,
 				sunk: false,

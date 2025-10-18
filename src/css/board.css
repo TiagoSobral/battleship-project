@@ -1,0 +1,30 @@
+.gameboard > div:first-of-type > .row,
+.gameboard > div:last-of-type > .row {
+	display: grid;
+	grid-template-columns: repeat(10, 60px);
+}
+
+ul:first-of-type,
+ul {
+	border-top: 1px solid black;
+}
+
+ul:last-of-type {
+	border-bottom: 1px solid black;
+}
+
+li:first-child,
+li {
+	border-left: 1px solid black;
+}
+
+li:last-child {
+	border-right: 1px solid black;
+}
+
+li {
+	height: 60px;
+	list-style-type: none;
+	text-align: center;
+	align-content: center;
+}

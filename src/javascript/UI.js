@@ -1,6 +1,7 @@
-export function renderBoard(playerBoard) {
+export function renderBoard(playerBoard, currentPlayer) {
 	const gameBoard = document.querySelector('.gameboard');
 	const boardElm = document.createElement('div');
+	boardElm.setAttribute('class', `${currentPlayer}`);
 	gameBoard.appendChild(boardElm);
 	for (let row = 0; row < playerBoard.length; row++) {
 		const rowElm = document.createElement('ul');

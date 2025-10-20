@@ -1,5 +1,4 @@
 import { populateBoard } from './gamecontroller.js';
-import { boardListener } from './listeners.js';
 
 export function renderBoard(playerBoard, currentPlayer) {
 	const gameBoard = document.querySelector('.gameboard');
@@ -27,21 +26,32 @@ export function renderBoard(playerBoard, currentPlayer) {
 	}
 }
 
-export function wasClicked(DomElement, playerObject) {
-	debugger;
+export function boardListener(playerObject, DomBoard = 'player-two') {
+	const allSquares = document.querySelectorAll(`.${DomBoard} li`);
+	allSquares.forEach((element) => {
+		element.addEventListener('click', () => {
+			wasClicked(playerObject, element);
+		});
+	});
+}
+
+export function wasClicked(playerObject, DomElement) {
 	let row = DomElement.dataset.row;
 	let col = DomElement.dataset.col;
 	let coordinates = [row, col];
-	let grandParentElm = DomElement.parentElement.parentElement;
-	if (grandParentElm.classList.contains('player-one')) {
+	let playerName = DomElement.parentElement.parentElement.classList[0];
+	let sibling;
+	if (playerName == 'player-one') {
 		playerObject.playerOne.game.receiveAttack(coordinates);
+		sibling = 'player-two';
 	} else {
 		playerObject.playerTwo.game.receiveAttack(coordinates);
+		sibling = 'player-one';
 	}
 	removeElements();
 	populateBoard(playerObject.playerOne);
 	populateBoard(playerObject.playerTwo);
-	boardListener(playerObject);
+	boardListener(playerObject, sibling);
 }
 
 function removeElements() {

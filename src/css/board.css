@@ -1,7 +1,12 @@
 .gameboard > div:first-of-type > .row,
 .gameboard > div:last-of-type > .row {
 	display: grid;
-	grid-template-columns: repeat(10, 60px);
+	grid-template-columns: repeat(10, 40px);
+}
+
+.gameboard {
+	display: flex;
+	gap: 10rem;
 }
 
 .gameboard > div {
@@ -47,8 +52,19 @@ li:last-child {
 }
 
 li {
-	height: 60px;
+	height: 40px;
 	list-style-type: none;
 	text-align: center;
 	align-content: center;
+}
+
+/* active styling */
+
+li:hover {
+	background-color: #385e72;
+	color: aliceblue;
+}
+
+li:active {
+	scale: 0.98;
 }

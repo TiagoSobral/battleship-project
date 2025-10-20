@@ -1,3 +1,6 @@
+import { populateBoard } from './gamecontroller.js';
+import { boardListener } from './listeners.js';
+
 export function renderBoard(playerBoard, currentPlayer) {
 	const gameBoard = document.querySelector('.gameboard');
 	const boardElm = document.createElement('div');
@@ -22,4 +25,28 @@ export function renderBoard(playerBoard, currentPlayer) {
 			colElm.textContent = contents;
 		}
 	}
+}
+
+export function wasClicked(DomElement, playerObject) {
+	debugger;
+	let row = DomElement.dataset.row;
+	let col = DomElement.dataset.col;
+	let coordinates = [row, col];
+	let grandParentElm = DomElement.parentElement.parentElement;
+	if (grandParentElm.classList.contains('player-one')) {
+		playerObject.playerOne.game.receiveAttack(coordinates);
+	} else {
+		playerObject.playerTwo.game.receiveAttack(coordinates);
+	}
+	removeElements();
+	populateBoard(playerObject.playerOne);
+	populateBoard(playerObject.playerTwo);
+	boardListener(playerObject);
+}
+
+function removeElements() {
+	const boards = document.querySelectorAll('.gameboard div');
+	boards.forEach((board) => {
+		board.remove();
+	});
 }

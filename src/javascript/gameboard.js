@@ -33,6 +33,7 @@ export class gameBoard {
 		let squareHit = this.board[row][column];
 		if (typeof squareHit.value == 'object') {
 			squareHit.value.hit();
+			squareHit.hit = true;
 		} else {
 			squareHit.value = 'X';
 		}
@@ -51,7 +52,7 @@ function createBoard() {
 		let row = [];
 		board.push(row);
 		for (let j = 0; j < 10; j++) {
-			let column = { value: '' };
+			let column = { value: '', hit: false };
 			board[i].push(column);
 		}
 	}

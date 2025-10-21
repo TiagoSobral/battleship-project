@@ -11,17 +11,21 @@ export function renderBoard(playerBoard, currentPlayer) {
 		boardElm.appendChild(rowElm);
 
 		for (let col = 0; col < playerBoard[row].length; col++) {
+			let contents = playerBoard[row][col];
 			const colElm = document.createElement('li');
 			colElm.setAttribute('class', `col`);
 			colElm.setAttribute('data-row', `${row}`);
 			colElm.setAttribute('data-col', `${col}`);
 			rowElm.appendChild(colElm);
-			let contents = playerBoard[row][col].value;
-			if (typeof contents == 'object') {
-				colElm.textContent = 'B';
+			if (typeof contents.value == 'object') {
+				if (contents.hit == true) {
+					colElm.setAttribute('hit', '');
+				} else {
+					colElm.textContent = 'B';
+				}
 				continue;
 			}
-			colElm.textContent = contents;
+			colElm.textContent = contents.value;
 		}
 	}
 }
@@ -30,12 +34,12 @@ export function boardListener(playerObject, DomBoard = 'player-two') {
 	const allSquares = document.querySelectorAll(`.${DomBoard} li`);
 	allSquares.forEach((element) => {
 		element.addEventListener('click', () => {
-			wasClicked(playerObject, element);
+			playRound(playerObject, element);
 		});
 	});
 }
 
-export function wasClicked(playerObject, DomElement) {
+export function playRound(playerObject, DomElement) {
 	let row = DomElement.dataset.row;
 	let col = DomElement.dataset.col;
 	let coordinates = [row, col];
@@ -60,3 +64,29 @@ function removeElements() {
 		board.remove();
 	});
 }
+
+function cpuPlays(playerObject) {
+	let opponent = playerObject.playerOne.game;
+	let row = randomizeNumber();
+	let col = randomizeNumber();
+	let square = document.querySelector(
+		`.player-one > .row:nth-child${row} > .col:nth-child${col} `
+	);
+	while (square.textContent == 'X' && square.classList.contains('hit')) {
+		row = randomizeNumber();
+		col = randomizeNumber();
+	}
+	opponent.receiveAttack([row, col]);
+}
+
+function randomizeNumber() {
+	Math.random() * (10 - 0) + 0;
+}
+
+/* 
+things to add:
+- every li that has a ship should have a class called ship for styling and
+removing the B or S from the board and when hit it can change color or add emoji.
+
+
+*/

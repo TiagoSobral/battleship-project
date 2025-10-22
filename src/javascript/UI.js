@@ -40,7 +40,6 @@ export function boardListener(playerObject, DomBoard = 'player-two') {
 }
 
 export function playRound(playerObject, DomElement) {
-	debugger;
 	let row = DomElement.dataset.row;
 	let col = DomElement.dataset.col;
 	let coordinates = [row, col];
@@ -49,7 +48,9 @@ export function playRound(playerObject, DomElement) {
 	removeElements();
 	populateBoard(playerObject.playerOne);
 	populateBoard(playerObject.playerTwo);
-	boardListener(playerObject);
+	if (isGameOver(playerObject) != true) {
+		boardListener(playerObject);
+	}
 }
 
 function removeElements() {
@@ -63,10 +64,12 @@ function cpuPlays(playerObject) {
 	let opponent = playerObject.playerOne.game;
 	let row = randomizeNumber();
 	let col = randomizeNumber();
+	/* the query selector has a +1 since the DOM doesn't have a 0 
+	 but the arrays have*/
 	let square = document.querySelector(
-		`.player-one > .row:nth-child(${row}) > .col:nth-child(${col}) `
+		`.player-one > .row:nth-child(${row + 1}) > .col:nth-child(${col + 1}) `
 	);
-	while (square.textContent == 'X' && square.classList.contains('hit')) {
+	while (square.textContent == 'X' || square.classList.contains('hit')) {
 		row = randomizeNumber();
 		col = randomizeNumber();
 	}
@@ -74,15 +77,32 @@ function cpuPlays(playerObject) {
 }
 
 function randomizeNumber() {
-	return Math.round(Math.random() * (10 - 0) + 0);
+	/* same with cpuPlays, the minimum has to be 1 cause the DOM has no 0 */
+	return Math.floor(
+		Math.random() * (Math.floor(10) - Math.ceil(1)) + Math.ceil(1)
+	);
+}
+
+function isGameOver(playerObject) {
+	let playerOneBoatsAreSunk = playerObject.playerOne.game.allSunk();
+	let cpuBoatsAreSunk = playerObject.playerTwo.game.allSunk();
+	const gameStatusElm = document.querySelector('.player-indication');
+	let gameIsOver = false;
+	if (playerOneBoatsAreSunk == 'Game Over!') {
+		gameStatusElm.textContent = `${playerOneBoatsAreSunk} ${playerObject.playerTwo.name} Won!`;
+		return (gameIsOver = true);
+	} else if (cpuBoatsAreSunk == 'Game Over!') {
+		gameStatusElm.textContent = `${cpuBoatsAreSunk} ${playerObject.playerOne.name} Won!`;
+		return (gameIsOver = true);
+	} else {
+		return gameIsOver;
+	}
 }
 
 /* 
 things to add:
 - every li that has a ship should have a class called ship for styling and
 removing the B or S from the board and when hit it can change color or add emoji.
-
-
 */
 
 /* 

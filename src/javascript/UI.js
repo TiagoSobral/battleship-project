@@ -40,22 +40,16 @@ export function boardListener(playerObject, DomBoard = 'player-two') {
 }
 
 export function playRound(playerObject, DomElement) {
+	debugger;
 	let row = DomElement.dataset.row;
 	let col = DomElement.dataset.col;
 	let coordinates = [row, col];
-	let playerName = DomElement.parentElement.parentElement.classList[0];
-	let sibling;
-	if (playerName == 'player-one') {
-		playerObject.playerOne.game.receiveAttack(coordinates);
-		sibling = 'player-two';
-	} else {
-		playerObject.playerTwo.game.receiveAttack(coordinates);
-		sibling = 'player-one';
-	}
+	playerObject.playerTwo.game.receiveAttack(coordinates);
+	cpuPlays(playerObject);
 	removeElements();
 	populateBoard(playerObject.playerOne);
 	populateBoard(playerObject.playerTwo);
-	boardListener(playerObject, sibling);
+	boardListener(playerObject);
 }
 
 function removeElements() {
@@ -70,7 +64,7 @@ function cpuPlays(playerObject) {
 	let row = randomizeNumber();
 	let col = randomizeNumber();
 	let square = document.querySelector(
-		`.player-one > .row:nth-child${row} > .col:nth-child${col} `
+		`.player-one > .row:nth-child(${row}) > .col:nth-child(${col}) `
 	);
 	while (square.textContent == 'X' && square.classList.contains('hit')) {
 		row = randomizeNumber();
@@ -80,7 +74,7 @@ function cpuPlays(playerObject) {
 }
 
 function randomizeNumber() {
-	Math.random() * (10 - 0) + 0;
+	return Math.round(Math.random() * (10 - 0) + 0);
 }
 
 /* 
@@ -89,4 +83,17 @@ things to add:
 removing the B or S from the board and when hit it can change color or add emoji.
 
 
+*/
+
+/* 
+code for a second player
+	let playerName = DomElement.parentElement.parentElement.classList[0];
+	let sibling;
+	if (playerName == 'player-one') {
+		playerObject.playerOne.game.receiveAttack(coordinates);
+		sibling = 'player-two';
+	} else {
+		playerObject.playerTwo.game.receiveAttack(coordinates);
+		sibling = 'player-one';
+	} 
 */

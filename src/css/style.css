@@ -3,19 +3,22 @@
 }
 
 header {
-	color: #385e72;
 	font-size: xx-large;
 	font-weight: 800;
-	align-content: center;
 }
 
 main {
 	align-content: center;
+	display: grid;
+	grid-template-columns: 1fr;
+	grid-template-rows: 0.5fr 3fr 1fr;
+	gap: 2rem;
+	align-items: center;
 }
 
 body {
 	display: grid;
-	grid-template-rows: 1fr 4fr 1fr;
+	grid-template-rows: 0.5fr 4fr 0.5fr;
 	grid-template-columns: 1fr;
 	justify-items: center;
 	gap: 10px;
@@ -25,7 +28,28 @@ body {
 	background: #b7cfdc;
 }
 
+header,
+footer {
+	background-color: #385e72;
+	color: #d9e4ec;
+	align-content: center;
+	text-align: center;
+	width: 100%;
+}
+
+footer {
+	font-size: large;
+	font-weight: 600;
+}
+
 .gameboard > div {
 	background: #cad9e3;
 	box-shadow: 0rem 0.1rem 1rem 0.2rem #385e7227;
+}
+
+.player-indication {
+	font-weight: 600;
+	font-size: x-large;
+	text-align: center;
+	color: #385e72;
 }

@@ -76,10 +76,10 @@ function cpuPlays(playerObject) {
 	opponent.receiveAttack([row, col]);
 }
 
-function randomizeNumber() {
+export function randomizeNumber(max = 10, min = 1) {
 	/* same with cpuPlays, the minimum has to be 1 cause the DOM has no 0 */
 	return Math.floor(
-		Math.random() * (Math.floor(10) - Math.ceil(1)) + Math.ceil(1)
+		Math.random() * (Math.floor(max) - Math.ceil(min)) + Math.ceil(min)
 	);
 }
 

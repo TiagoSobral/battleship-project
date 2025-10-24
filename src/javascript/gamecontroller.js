@@ -1,9 +1,10 @@
 import { Player } from './player.js';
 import { renderBoard } from './UI.js';
+import { randomizeNumber } from './UI.js';
 
 function createPlayers(
-	playerOneName = 'Player One',
-	playerTwoName = 'Player Two'
+	playerOneName = 'player-one',
+	playerTwoName = 'player-two'
 ) {
 	const playerOne = new Player(playerOneName);
 	const playerTwo = new Player(playerTwoName);
@@ -11,23 +12,44 @@ function createPlayers(
 }
 
 export let players = createPlayers();
-let numberOne = players.playerOne.game;
-let numberTwo = players.playerTwo.game;
-
-numberOne.addShip([0, 0], [4, 0], 5);
-numberOne.addShip([5, 5], [8, 5], 4);
-numberOne.addShip([3, 7], [3, 9], 3);
-numberOne.addShip([7, 2], [9, 2], 3);
-numberOne.addShip([1, 8], [1, 9], 2);
-
-numberTwo.addShip([0, 0], [4, 0], 5);
-numberTwo.addShip([5, 5], [8, 5], 4);
-numberTwo.addShip([3, 7], [3, 9], 3);
-numberTwo.addShip([7, 2], [9, 2], 3);
-numberTwo.addShip([1, 8], [1, 9], 2);
 
 export function populateBoard(player) {
 	let playerBoard = player.game.board;
 	let playerName = player.name;
 	renderBoard(playerBoard, playerName);
+}
+
+export function randomizeBoatsPosition(playerObject, player = 'cpu') {
+	let playerGameBoard = playerObject.playerOne.game;
+	if (player == 'cpu') {
+		playerGameBoard = playerObject.playerTwo.game;
+	}
+	let typesOfShip = [5, 4, 3, 3, 2];
+	while (typesOfShip.length != 0) {
+		try {
+			let startCord = [randomizeNumber(), randomizeNumber()];
+			let plays = possibleShipPositions(startCord, typesOfShip[0]);
+			let trialPlay = plays[randomizeNumber(plays.length, 0)];
+			playerGameBoard.addShip(startCord, trialPlay, typesOfShip[0]);
+		} catch (error) {
+			continue;
+		}
+		typesOfShip.splice(0, 1);
+	}
+}
+
+function possibleShipPositions(startCord, shipLength) {
+	let [startRow, startCol] = startCord;
+	let plays = [
+		[startRow + shipLength - 1, startCol],
+		[startRow, startCol + shipLength - 1],
+	];
+	for (let i = 0; i < plays.length; i++) {
+		let [x, y] = plays[i];
+		if (x > 9 || x < 0 || y > 9 || y < 0) {
+			plays.splice(i, 1);
+			i--;
+		}
+	}
+	return plays;
 }

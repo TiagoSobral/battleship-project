@@ -1,4 +1,4 @@
-import { populateBoard } from './gamecontroller.js';
+import { populateBoard } from '../controller/gamecontroller.js';
 
 export function renderBoard(playerBoard, currentPlayer) {
 	const gameBoard = document.querySelector('.gameboard');
@@ -50,6 +50,9 @@ export function playRound(playerObject, DomElement) {
 	populateBoard(playerObject.playerTwo);
 	if (isGameOver(playerObject) != true) {
 		boardListener(playerObject);
+	} else {
+		// add reset button or new game that starts everything over again.
+		// perhaps a new game or the same players and a new round
 	}
 }
 
@@ -85,14 +88,14 @@ export function randomizeNumber(max = 10, min = 1) {
 
 function isGameOver(playerObject) {
 	let playerOneBoatsAreSunk = playerObject.playerOne.game.allSunk();
-	let cpuBoatsAreSunk = playerObject.playerTwo.game.allSunk();
+	let playerTwoBoatsAreSunk = playerObject.playerTwo.game.allSunk();
 	const gameStatusElm = document.querySelector('.player-indication');
 	let gameIsOver = false;
 	if (playerOneBoatsAreSunk == 'Game Over!') {
 		gameStatusElm.textContent = `${playerOneBoatsAreSunk} ${playerObject.playerTwo.name} Won!`;
 		return (gameIsOver = true);
-	} else if (cpuBoatsAreSunk == 'Game Over!') {
-		gameStatusElm.textContent = `${cpuBoatsAreSunk} ${playerObject.playerOne.name} Won!`;
+	} else if (playerTwoBoatsAreSunk == 'Game Over!') {
+		gameStatusElm.textContent = `${playerTwoBoatsAreSunk} ${playerObject.playerOne.name} Won!`;
 		return (gameIsOver = true);
 	} else {
 		return gameIsOver;

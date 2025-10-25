@@ -1,6 +1,6 @@
-import { Player } from './player.js';
-import { renderBoard } from './UI.js';
-import { randomizeNumber } from './UI.js';
+import { Player } from '../players/player.js';
+import { renderBoard } from '../ui/ui.js';
+import { randomizeNumber } from '../ui/ui.js';
 
 function createPlayers(
 	playerOneName = 'player-one',

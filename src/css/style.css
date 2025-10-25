@@ -7,16 +7,6 @@ header {
 	font-weight: 800;
 }
 
-main {
-	width: 100%;
-	align-content: center;
-	display: grid;
-	grid-template-columns: 1fr;
-	grid-template-rows: 0.5fr 3fr 1fr;
-	gap: 2rem;
-	align-items: center;
-}
-
 body {
 	display: grid;
 	grid-template-rows: 0.5fr 4fr 0.5fr;
@@ -27,6 +17,12 @@ body {
 
 body {
 	background: #b7cfdc;
+}
+
+main {
+	align-content: center;
+	justify-items: center;
+	width: 100%;
 }
 
 header,

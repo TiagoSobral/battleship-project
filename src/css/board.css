@@ -1,3 +1,13 @@
+/* main {
+	width: 100%;
+	align-content: center;
+	display: grid;
+	grid-template-columns: 1fr;
+	grid-template-rows: 0.5fr 3fr 1fr;
+	gap: 2rem;
+	align-items: center;
+} */
+
 .gameboard > div:first-of-type > .row,
 .gameboard > div:last-of-type > .row {
 	display: grid;

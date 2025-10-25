@@ -89,7 +89,7 @@ export function randomizeNumber(max = 10, min = 1) {
 function isGameOver(playerObject) {
 	let playerOneBoatsAreSunk = playerObject.playerOne.game.allSunk();
 	let playerTwoBoatsAreSunk = playerObject.playerTwo.game.allSunk();
-	const gameStatusElm = document.querySelector('.player-indication');
+	const gameStatusElm = document.querySelector('.player-info');
 	let gameIsOver = false;
 	if (playerOneBoatsAreSunk == 'Game Over!') {
 		gameStatusElm.textContent = `${playerOneBoatsAreSunk} ${playerObject.playerTwo.name} Won!`;

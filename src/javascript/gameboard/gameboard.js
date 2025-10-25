@@ -1,4 +1,4 @@
-import { Ship } from './ships.js';
+import { Ship } from '../ships/ships.js';
 
 export class gameBoard {
 	board = createBoard();

@@ -1,4 +1,4 @@
-import { gameBoard } from './gameboard.js';
+import { gameBoard } from '../gameboard/gameboard.js';
 
 export class Player {
 	game = new gameBoard();

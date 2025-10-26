@@ -1,4 +1,5 @@
 import { populateBoard } from '../controller/gamecontroller.js';
+import { boardListener } from '../listeners/listeners.js';
 
 export function renderBoard(playerBoard, currentPlayer) {
 	const gameBoard = document.querySelector('.gameboard');
@@ -30,15 +31,6 @@ export function renderBoard(playerBoard, currentPlayer) {
 	}
 }
 
-export function boardListener(playerObject, DomBoard = 'player-two') {
-	const allSquares = document.querySelectorAll(`.${DomBoard} li`);
-	allSquares.forEach((element) => {
-		element.addEventListener('click', () => {
-			playRound(playerObject, element);
-		});
-	});
-}
-
 export function playRound(playerObject, DomElement) {
 	let row = DomElement.dataset.row;
 	let col = DomElement.dataset.col;
@@ -56,14 +48,14 @@ export function playRound(playerObject, DomElement) {
 	}
 }
 
-function removeElements() {
+export function removeElements() {
 	const boards = document.querySelectorAll('.gameboard div');
 	boards.forEach((board) => {
 		board.remove();
 	});
 }
 
-function cpuPlays(playerObject) {
+export function cpuPlays(playerObject) {
 	let opponent = playerObject.playerOne.game;
 	let row = randomizeNumber();
 	let col = randomizeNumber();

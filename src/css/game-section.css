@@ -6,6 +6,7 @@
 	grid-template-rows: 0.5fr 3fr 1fr;
 	gap: 2rem;
 	align-items: center;
+	justify-items: center;
 }
 
 .gameboard > div:first-of-type > .row,
@@ -34,6 +35,11 @@
 	font-size: x-large;
 	text-align: center;
 	color: #385e72;
+}
+
+.button-section {
+	display: flex;
+	gap: 5rem;
 }
 
 ul:first-of-type,

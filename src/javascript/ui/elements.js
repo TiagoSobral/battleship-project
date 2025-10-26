@@ -6,8 +6,10 @@ export function menuSelection() {
 	menu.setAttribute('class', 'selection-menu');
 	vsComputer.setAttribute('class', 'vs-computer');
 	vsComputer.textContent = 'VS Computer';
+	vsComputer.value = 'cpu';
 	vsPlayer.setAttribute('class', 'vs-player');
 	vsPlayer.textContent = 'VS Player';
+	vsPlayer.value = 'player-two';
 	main.appendChild(menu);
 	menu.append(vsComputer, vsPlayer);
 }
@@ -31,4 +33,20 @@ export function gameElements() {
 	buttonSection.setAttribute('class', 'button-section');
 	main.appendChild(gameSection);
 	gameSection.append(playerInfo, gameBoard, buttonSection);
+}
+
+export function setPlayerInfoText(text) {
+	const playerInfo = document.querySelector('.player-info');
+	playerInfo.textContent = text;
+}
+
+export function shipPlacementBtns() {
+	const btnSection = document.querySelector('.button-section');
+	const startGameBtn = document.createElement('button');
+	const randomizeBtn = document.createElement('button');
+	startGameBtn.classList.add('start-game');
+	startGameBtn.textContent = 'Play Game';
+	randomizeBtn.classList.add('randomize-button');
+	randomizeBtn.textContent = 'Randomize';
+	btnSection.append(startGameBtn, randomizeBtn);
 }

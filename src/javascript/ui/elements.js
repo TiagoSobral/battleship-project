@@ -40,13 +40,18 @@ export function setPlayerInfoText(text) {
 	playerInfo.textContent = text;
 }
 
-export function shipPlacementBtns() {
+export function createBtn(name, attributeOne, attributeTwo) {
 	const btnSection = document.querySelector('.button-section');
-	const startGameBtn = document.createElement('button');
-	const randomizeBtn = document.createElement('button');
-	startGameBtn.classList.add('start-game');
-	startGameBtn.textContent = 'Play Game';
-	randomizeBtn.classList.add('randomize-button');
-	randomizeBtn.textContent = 'Randomize';
-	btnSection.append(startGameBtn, randomizeBtn);
+	const newBtn = document.createElement('button');
+	newBtn.classList.add(attributeOne);
+	newBtn.classList.add(attributeTwo);
+	newBtn.textContent = name;
+	btnSection.append(newBtn);
+}
+
+export function removeBtns() {
+	const btnSection = document.querySelectorAll('.button-section > *');
+	for (let btn of btnSection) {
+		btn.remove();
+	}
 }

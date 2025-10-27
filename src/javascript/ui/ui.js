@@ -37,7 +37,7 @@ export function playRound(playerObject, DomElement) {
 	let coordinates = [row, col];
 	playerObject.playerTwo.game.receiveAttack(coordinates);
 	cpuPlays(playerObject);
-	removeElements();
+	removeBoard();
 	populateBoard(playerObject.playerOne);
 	populateBoard(playerObject.playerTwo);
 	if (isGameOver(playerObject) != true) {
@@ -48,7 +48,7 @@ export function playRound(playerObject, DomElement) {
 	}
 }
 
-export function removeElements() {
+export function removeBoard() {
 	const boards = document.querySelectorAll('.gameboard div');
 	boards.forEach((board) => {
 		board.remove();

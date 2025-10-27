@@ -2,16 +2,11 @@ import { Player } from '../players/player.js';
 import { renderBoard } from '../ui/ui.js';
 import { randomizeNumber } from '../ui/ui.js';
 
-function createPlayers(
-	playerOneName = 'player-one',
-	playerTwoName = 'player-two'
-) {
-	const playerOne = new Player(playerOneName);
+export function createPlayers(playerTwoName = 'cpu') {
+	const playerOne = new Player('player-one');
 	const playerTwo = new Player(playerTwoName);
 	return { playerOne, playerTwo };
 }
-
-export let players = createPlayers();
 
 export function populateBoard(player) {
 	let playerBoard = player.game.board;

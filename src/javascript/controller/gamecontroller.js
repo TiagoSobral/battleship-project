@@ -1,5 +1,4 @@
 import { Player } from '../players/player.js';
-import { renderBoard } from '../ui/ui.js';
 import { randomizeNumber } from '../ui/ui.js';
 
 export function createPlayers(playerTwoName = 'cpu') {
@@ -8,15 +7,9 @@ export function createPlayers(playerTwoName = 'cpu') {
 	return { playerOne, playerTwo };
 }
 
-export function populateBoard(player) {
-	let playerBoard = player.game.board;
-	let playerName = player.name;
-	renderBoard(playerBoard, playerName);
-}
-
 export function randomizeBoatsPosition(playerObject, player = 'cpu') {
 	let playerGameBoard = playerObject.playerOne.game;
-	if (player == 'cpu') {
+	if (player != 'player-one') {
 		playerGameBoard = playerObject.playerTwo.game;
 	}
 	let typesOfShip = [5, 4, 3, 3, 2];

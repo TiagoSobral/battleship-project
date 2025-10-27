@@ -1,10 +1,10 @@
-import { populateBoard } from '../controller/gamecontroller.js';
 import { boardListener } from '../listeners/listeners.js';
 
-export function renderBoard(playerBoard, currentPlayer) {
+export function renderBoard(player) {
+	let playerBoard = player.game.board;
 	const gameBoard = document.querySelector('.gameboard');
 	const boardElm = document.createElement('div');
-	boardElm.setAttribute('class', `${currentPlayer}`);
+	boardElm.setAttribute('class', `${player.name}`);
 	gameBoard.appendChild(boardElm);
 	for (let row = 0; row < playerBoard.length; row++) {
 		const rowElm = document.createElement('ul');
@@ -38,8 +38,8 @@ export function playRound(playerObject, DomElement) {
 	playerObject.playerTwo.game.receiveAttack(coordinates);
 	cpuPlays(playerObject);
 	removeBoard();
-	populateBoard(playerObject.playerOne);
-	populateBoard(playerObject.playerTwo);
+	renderBoard(playerObject.playerOne);
+	renderBoard(playerObject.playerTwo);
 	if (isGameOver(playerObject) != true) {
 		boardListener(playerObject);
 	} else {

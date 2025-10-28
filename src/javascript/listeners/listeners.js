@@ -9,7 +9,7 @@ import {
 	removeBtns,
 	setPlayerInfoText,
 } from '../ui/elements';
-import { renderBoard, removeBoard } from '../ui/ui.js';
+import { renderBoard, removeBoard, playRound } from '../ui/ui.js';
 
 export function boardListener(playerObject, DomBoard = 'player-two') {
 	const allSquares = document.querySelectorAll(`.${DomBoard} li`);
@@ -58,23 +58,22 @@ function confirmBtnListener(playerObject) {
 	confirmBtn.addEventListener('click', () => {
 		// debugger;
 		let player = confirmBtn.classList[1];
+		let opponent = playerObject.playerTwo;
 		removeBoard();
 		removeBtns();
-		renderBoard(playerObject.playerTwo);
-		if (playerObject.playerTwo.name == 'cpu') {
-			randomizeBoatsPosition(playerObject, player);
-			renderBoard(playerObject.playerTwo);
-			boardListener(playerObject);
-			return;
-		} else if (currentPlayer == 'player-one') {
-			createBtn('Randomize', 'randomize-button', 'player-two');
-			randomizeBtnListener(playerObject);
+		if (opponent.name == 'cpu') {
+			randomizeBoatsPosition(playerObject);
+			renderBoard(opponent);
+			boardListener(playerObject, opponent.name);
 		} else {
-			// removeBtns();
-			// removeBoard();
-			renderBoard(playerObject.playerTwo);
-			createBtn('Confirm', 'confirm-button', player);
-			confirmBtnListener(playerObject);
+			renderBoard(opponent);
+			if (currentPlayer == 'player-one') {
+				createBtn('Randomize', 'randomize-button', 'player-two');
+				randomizeBtnListener(playerObject);
+			} else {
+				createBtn('Confirm', 'confirm-button', player);
+				confirmBtnListener(playerObject);
+			}
 		}
 	});
 }

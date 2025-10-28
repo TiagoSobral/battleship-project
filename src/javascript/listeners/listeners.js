@@ -9,13 +9,33 @@ import {
 	removeBtns,
 	setPlayerInfoText,
 } from '../ui/elements';
-import { renderBoard, removeBoard, playRound } from '../ui/ui.js';
+import {
+	renderBoard,
+	removeBoard,
+	cpuPlays,
+	dropBomb,
+	isGameOver,
+} from '../ui/ui.js';
 
-export function boardListener(playerObject, DomBoard = 'player-two') {
-	const allSquares = document.querySelectorAll(`.${DomBoard} li`);
+export function boardListener(playerObject, opponent = 'player-two') {
+	const allSquares = document.querySelectorAll(`.${opponent} li`);
 	allSquares.forEach((element) => {
 		element.addEventListener('click', () => {
-			playRound(playerObject, element);
+			let row = element.dataset.row;
+			let col = element.dataset.col;
+			let coordinates = [row, col];
+			dropBomb(playerObject, opponent, coordinates);
+			if (isGameOver(playerObject, opponent)) {
+				// create a function called endGameActions
+			}
+			if (opponent == 'cpu') {
+				cpuPlays(playerObject);
+				boardListener(playerObject, 'cpu');
+			} else if (opponent == 'player-one') {
+				boardListener(playerObject, 'player-two');
+			} else {
+				boardListener(playerObject, 'player-one');
+			}
 		});
 	});
 }
@@ -28,7 +48,7 @@ export function menuSelectionListener() {
 			cleanMainElement();
 			gameElements();
 			renderBoard(players.playerOne);
-			setPlayerInfoText('Place your ships!');
+			setPlayerInfoText(`Place your ships, Player One!`);
 			createBtn('Randomize', 'randomize-button', 'player-one');
 			randomizeBtnListener(players);
 		});
@@ -56,27 +76,40 @@ function confirmBtnListener(playerObject) {
 	const confirmBtn = document.querySelector('.confirm-button');
 	let currentPlayer = confirmBtn.classList[1];
 	confirmBtn.addEventListener('click', () => {
-		// debugger;
-		let player = confirmBtn.classList[1];
 		let opponent = playerObject.playerTwo;
 		removeBoard();
 		removeBtns();
 		if (opponent.name == 'cpu') {
 			randomizeBoatsPosition(playerObject);
+			renderBoard(playerObject.playerOne);
 			renderBoard(opponent);
 			boardListener(playerObject, opponent.name);
 		} else {
-			renderBoard(opponent);
 			if (currentPlayer == 'player-one') {
+				setPlayerInfoText(`Place your ships, Player Two!`);
 				createBtn('Randomize', 'randomize-button', 'player-two');
 				randomizeBtnListener(playerObject);
 			} else {
-				createBtn('Confirm', 'confirm-button', player);
-				confirmBtnListener(playerObject);
+				renderBoard(playerObject.playerOne);
 			}
+			renderBoard(opponent);
+			boardListener(playerObject, 'player-two');
 		}
 	});
 }
 
-/*  Problem: 
-	the last confirmation doubles the grid instead of clearing the old one */
+/* need to figure out a way to cover the opponents boats and the current player boats
+are visible.
+
+also check condition for two players there is a mistake when calling cpuPlays, it needs to have a condition
+*/
+
+/*  COMMIT: PLAYING AGAINST TWO REAL PLAYERS WORKS
+
+THINGS TO CHECK: 
+- end game
+- perhaps create a function such as game or playRound again to handle the code without ifs
+- drag and drop tomorrow
+- buttons to restart game
+- cpu plays should check if cpu won
+*/

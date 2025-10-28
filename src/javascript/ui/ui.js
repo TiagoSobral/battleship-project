@@ -57,14 +57,13 @@ export function removeBoard() {
 
 export function cpuPlays(playerObject) {
 	let opponent = playerObject.playerOne.game;
+	let opponentBoard = opponent.board;
 	let row = randomizeNumber();
 	let col = randomizeNumber();
-	/* the query selector has a +1 since the DOM doesn't have a 0 
-	 but the arrays have*/
-	let square = document.querySelector(
-		`.player-one > .row:nth-child(${row + 1}) > .col:nth-child(${col + 1}) `
-	);
-	while (square.textContent == 'X' || square.classList.contains('hit')) {
+	while (
+		opponentBoard[row][col].value == 'X' ||
+		opponentBoard[row][col].hit == true
+	) {
 		row = randomizeNumber();
 		col = randomizeNumber();
 	}

@@ -22,7 +22,7 @@ export function renderBoard(player) {
 				if (contents.hit == true) {
 					colElm.setAttribute('hit', '');
 				} else {
-					colElm.textContent = 'B';
+					colElm.setAttribute('ship', '');
 				}
 				continue;
 			}
@@ -31,21 +31,15 @@ export function renderBoard(player) {
 	}
 }
 
-export function playRound(playerObject, DomElement) {
-	let row = DomElement.dataset.row;
-	let col = DomElement.dataset.col;
-	let coordinates = [row, col];
-	playerObject.playerTwo.game.receiveAttack(coordinates);
-	cpuPlays(playerObject);
+export function dropBomb(playerObject, opponent, coordinates) {
+	if (opponent == 'cpu' || opponent == 'player-two') {
+		playerObject.playerTwo.game.receiveAttack(coordinates);
+	} else {
+		playerObject.playerOne.game.receiveAttack(coordinates);
+	}
 	removeBoard();
 	renderBoard(playerObject.playerOne);
 	renderBoard(playerObject.playerTwo);
-	if (isGameOver(playerObject) != true) {
-		boardListener(playerObject);
-	} else {
-		// add reset button or new game that starts everything over again.
-		// perhaps a new game or the same players and a new round
-	}
 }
 
 export function removeBoard() {
@@ -68,6 +62,9 @@ export function cpuPlays(playerObject) {
 		col = randomizeNumber();
 	}
 	opponent.receiveAttack([row, col]);
+	removeBoard();
+	renderBoard(playerObject.playerOne);
+	renderBoard(playerObject.playerTwo);
 }
 
 export function randomizeNumber(max = 10, min = 1) {
@@ -77,19 +74,17 @@ export function randomizeNumber(max = 10, min = 1) {
 	);
 }
 
-function isGameOver(playerObject) {
-	let playerOneBoatsAreSunk = playerObject.playerOne.game.allSunk();
-	let playerTwoBoatsAreSunk = playerObject.playerTwo.game.allSunk();
-	const gameStatusElm = document.querySelector('.player-info');
-	let gameIsOver = false;
-	if (playerOneBoatsAreSunk == 'Game Over!') {
-		gameStatusElm.textContent = `${playerOneBoatsAreSunk} ${playerObject.playerTwo.name} Won!`;
-		return (gameIsOver = true);
-	} else if (playerTwoBoatsAreSunk == 'Game Over!') {
-		gameStatusElm.textContent = `${playerTwoBoatsAreSunk} ${playerObject.playerOne.name} Won!`;
-		return (gameIsOver = true);
+export function isGameOver(playerObject, opponent) {
+	let opponentBoatsAreSunk;
+	if (opponent == 'cpu' || opponent == 'player-two') {
+		opponentBoatsAreSunk = playerObject.playerTwo.game.allSunk();
 	} else {
-		return gameIsOver;
+		opponentBoatsAreSunk = playerObject.playerOne.game.allSunk();
+	}
+	if (opponentBoatsAreSunk == 'Game Over!') {
+		return true;
+	} else {
+		return false;
 	}
 }
 

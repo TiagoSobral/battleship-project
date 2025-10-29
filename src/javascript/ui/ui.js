@@ -3,6 +3,7 @@ import {
 	customListener,
 	menuSelectionListener,
 	randomizeBtnListener,
+	boardListener,
 } from '../listeners/listeners.js';
 import {
 	cleanMainElement,
@@ -43,15 +44,32 @@ export function renderBoard(player) {
 	}
 }
 
-export function dropBomb(playerObject, opponent, coordinates) {
-	if (opponent == 'cpu' || opponent == 'player-two') {
-		playerObject.playerTwo.game.receiveAttack(coordinates);
-	} else {
-		playerObject.playerOne.game.receiveAttack(coordinates);
-	}
-	removeBoard();
+export function renderBothBoards(playerObject) {
 	renderBoard(playerObject.playerOne);
 	renderBoard(playerObject.playerTwo);
+}
+
+export function playRound(playerObject, opponent, coordinates) {
+	let nextPlayer;
+	if (opponent == 'player-two' || opponent == 'cpu') {
+		playerObject.playerTwo.game.receiveAttack(coordinates);
+		nextPlayer = playerObject.playerOne.name;
+		// boardListener(playerObject, 'player-one');
+	} else {
+		playerObject.playerOne.game.receiveAttack(coordinates);
+		nextPlayer = playerObject.playerTwo.name;
+		// boardListener(playerObject, 'player-two');
+	}
+	removeBoard();
+	renderBothBoards(playerObject);
+	let endGame = isGameOver(playerObject, opponent);
+	if (endGame.gameOver) {
+		endGameActions(endGame.winner);
+	} else if (opponent != 'cpu') {
+		boardListener(playerObject, nextPlayer);
+	} else {
+		cpuPlays(playerObject);
+	}
 }
 
 export function removeBoard() {
@@ -62,6 +80,7 @@ export function removeBoard() {
 }
 
 export function cpuPlays(playerObject) {
+	// debugger;
 	let opponent = playerObject.playerOne.game;
 	let opponentBoard = opponent.board;
 	let row = randomizeNumber();
@@ -75,9 +94,13 @@ export function cpuPlays(playerObject) {
 	}
 	opponent.receiveAttack([row, col]);
 	removeBoard();
-	renderBoard(playerObject.playerOne);
-	renderBoard(playerObject.playerTwo);
-	return isGameOver(playerObject, 'player-one');
+	renderBothBoards(playerObject);
+	let isOver = isGameOver(playerObject, 'player-one');
+	if (!isOver.gameOver) {
+		boardListener(playerObject, 'cpu');
+	} else {
+		return endGameActions('cpu');
+	}
 }
 
 export function randomizeNumber(max = 10, min = 1) {

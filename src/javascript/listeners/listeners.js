@@ -12,9 +12,8 @@ import {
 import {
 	renderBoard,
 	removeBoard,
-	cpuPlays,
-	dropBomb,
-	isGameOver,
+	renderBothBoards,
+	playRound,
 } from '../ui/ui.js';
 
 export function boardListener(playerObject, opponent = 'player-two') {
@@ -24,18 +23,7 @@ export function boardListener(playerObject, opponent = 'player-two') {
 			let row = element.dataset.row;
 			let col = element.dataset.col;
 			let coordinates = [row, col];
-			dropBomb(playerObject, opponent, coordinates);
-			if (isGameOver(playerObject, opponent)) {
-				// create a function called endGameActions
-			}
-			if (opponent == 'cpu') {
-				cpuPlays(playerObject);
-				boardListener(playerObject, 'cpu');
-			} else if (opponent == 'player-one') {
-				boardListener(playerObject, 'player-two');
-			} else {
-				boardListener(playerObject, 'player-one');
-			}
+			playRound(playerObject, opponent, coordinates);
 		});
 	});
 }
@@ -55,7 +43,7 @@ export function menuSelectionListener() {
 	});
 }
 
-function randomizeBtnListener(playerObject) {
+export function randomizeBtnListener(playerObject) {
 	const randomizeBtn = document.querySelector('.randomize-button');
 	randomizeBtn.addEventListener('click', () => {
 		let player = randomizeBtn.classList[1];
@@ -81,8 +69,7 @@ function confirmBtnListener(playerObject) {
 		removeBtns();
 		if (opponent.name == 'cpu') {
 			randomizeBoatsPosition(playerObject);
-			renderBoard(playerObject.playerOne);
-			renderBoard(opponent);
+			renderBothBoards(playerObject);
 			boardListener(playerObject, opponent.name);
 		} else {
 			if (currentPlayer == 'player-one') {
@@ -96,6 +83,11 @@ function confirmBtnListener(playerObject) {
 			boardListener(playerObject, 'player-two');
 		}
 	});
+}
+
+export function customListener(element, callback) {
+	const domElement = document.querySelector(`.${element}`);
+	domElement.addEventListener('click', callback);
 }
 
 /* need to figure out a way to cover the opponents boats and the current player boats

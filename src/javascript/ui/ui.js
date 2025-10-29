@@ -1,4 +1,16 @@
-import { boardListener } from '../listeners/listeners.js';
+import { createPlayers } from '../controller/gamecontroller.js';
+import {
+	customListener,
+	menuSelectionListener,
+	randomizeBtnListener,
+} from '../listeners/listeners.js';
+import {
+	cleanMainElement,
+	createBtn,
+	gameElements,
+	menuSelection,
+	setPlayerInfoText,
+} from './elements.js';
 
 export function renderBoard(player) {
 	let playerBoard = player.game.board;
@@ -65,6 +77,7 @@ export function cpuPlays(playerObject) {
 	removeBoard();
 	renderBoard(playerObject.playerOne);
 	renderBoard(playerObject.playerTwo);
+	return isGameOver(playerObject, 'player-one');
 }
 
 export function randomizeNumber(max = 10, min = 1) {
@@ -74,35 +87,56 @@ export function randomizeNumber(max = 10, min = 1) {
 	);
 }
 
-export function isGameOver(playerObject, opponent) {
-	let opponentBoatsAreSunk;
-	if (opponent == 'cpu' || opponent == 'player-two') {
-		opponentBoatsAreSunk = playerObject.playerTwo.game.allSunk();
-	} else {
-		opponentBoatsAreSunk = playerObject.playerOne.game.allSunk();
+export function isGameOver(playerObject) {
+	let winner;
+	let playerOneSunk = playerObject.playerOne.game.allSunk();
+	let playerTwoSunk = playerObject.playerTwo.game.allSunk();
+	let gameOver = false;
+
+	if (playerOneSunk == 'Game Over!') {
+		winner = playerObject.playerTwo.name;
+		gameOver = true;
+	} else if (playerTwoSunk == 'Game Over!') {
+		winner = playerObject.playerOne.name;
+		gameOver = true;
 	}
-	if (opponentBoatsAreSunk == 'Game Over!') {
-		return true;
+
+	return { gameOver, winner };
+}
+
+export function endGameActions(winner) {
+	const playerInfo = document.querySelector('.player-info');
+	if (winner == 'cpu') {
+		playerInfo.textContent = "You've been beaten by a Computer";
+	} else if (winner == 'player-two') {
+		playerInfo.textContent = 'Player Two has Won the Game!';
 	} else {
-		return false;
+		playerInfo.textContent = 'Player One has Won the Game!';
 	}
+	createBtn('Play Again!', 'play-again', 'end-game');
+	createBtn('Main Menu!', 'main-menu', 'end-game');
+	customListener('play-again', () => playAgain(winner));
+	customListener('main-menu', () => returnToMainMenu());
+}
+
+function playAgain(opponent) {
+	let players = createPlayers(opponent);
+	cleanMainElement();
+	gameElements();
+	renderBoard(players.playerOne);
+	setPlayerInfoText(`Place your ships, Player One!`);
+	createBtn('Randomize', 'randomize-button', 'player-one');
+	randomizeBtnListener(players);
+}
+
+function returnToMainMenu() {
+	cleanMainElement();
+	menuSelection();
+	menuSelectionListener();
 }
 
 /* 
 things to add:
 - every li that has a ship should have a class called ship for styling and
 removing the B or S from the board and when hit it can change color or add emoji.
-*/
-
-/* 
-code for a second player
-	let playerName = DomElement.parentElement.parentElement.classList[0];
-	let sibling;
-	if (playerName == 'player-one') {
-		playerObject.playerOne.game.receiveAttack(coordinates);
-		sibling = 'player-two';
-	} else {
-		playerObject.playerTwo.game.receiveAttack(coordinates);
-		sibling = 'player-one';
-	} 
 */

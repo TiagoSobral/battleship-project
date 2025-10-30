@@ -20,7 +20,7 @@ export function boardListener(playerObject, opponent = 'player-two') {
 	const allSquares = document.querySelectorAll(`.${opponent} li`);
 	allSquares.forEach((element) => {
 		element.addEventListener('click', () => {
-			let row = element.dataset.row;
+			let row = element.parentElement.dataset.row;
 			let col = element.dataset.col;
 			let coordinates = [row, col];
 			playRound(playerObject, opponent, coordinates);
@@ -32,6 +32,7 @@ export function menuSelectionListener() {
 	const menuBtns = document.querySelectorAll('.selection-menu > *');
 	menuBtns.forEach((element) => {
 		element.addEventListener('click', () => {
+			// debugger;
 			let players = createPlayers(element.value);
 			cleanMainElement();
 			gameElements();
@@ -56,7 +57,9 @@ export function randomizeBtnListener(playerObject) {
 		}
 		removeBtns();
 		createBtn('Confirm', 'confirm-button', player);
+		createBtn('Randomize', 'randomize-button', player);
 		confirmBtnListener(playerObject);
+		randomizeBtnListener(playerObject);
 	});
 }
 

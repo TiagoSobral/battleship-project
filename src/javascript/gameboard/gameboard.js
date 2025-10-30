@@ -33,6 +33,10 @@ export class gameBoard {
 		if (isGameOver) return 'Game Over!';
 		return isGameOver;
 	}
+
+	clearBoard() {
+		this.board = createBoard();
+	}
 }
 
 function createBoard() {

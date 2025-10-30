@@ -14,7 +14,6 @@ describe('Game Board', () => {
 	});
 
 	it('Adds ship horizontally', () => {
-		debugger;
 		newBoard.addShip([0, 0], [0, 4], 5);
 		for (let i = 0; i < 5; i++) {
 			expect(newBoard.board[0][0 + i].value).toEqual({
@@ -68,6 +67,16 @@ describe('Game Board', () => {
 		}
 		/* the last hit on the last boat standing should return Game Over */
 		expect(newBoard.allSunk()).toBe('Game Over!');
+	});
+
+	it('Clears Board', () => {
+		debugger;
+		newBoard.clearBoard();
+		for (let row of newBoard.board) {
+			for (let square of row) {
+				expect(square).toEqual({ value: '', hit: false });
+			}
+		}
 	});
 });
 

@@ -31,16 +31,19 @@ export function renderBoard(player) {
 			colElm.setAttribute('class', `col`);
 			colElm.setAttribute('data-col', `${col}`);
 			rowElm.appendChild(colElm);
-			if (typeof contents.value == 'object') {
-				if (contents.hit == true) {
-					colElm.setAttribute('hit', '');
-				} else {
-					colElm.setAttribute('ship', '');
-				}
-				continue;
-			}
-			colElm.textContent = contents.value;
+			populateSquareInfo(contents, colElm);
 		}
+	}
+}
+
+function populateSquareInfo(square, element) {
+	if (typeof square.value == 'object') {
+		element.setAttribute('ship', '');
+	} else {
+		element.textContent = square.value;
+	}
+	if (square.hit == true) {
+		element.setAttribute('hit', '');
 	}
 }
 
@@ -54,11 +57,9 @@ export function playRound(playerObject, opponent, coordinates) {
 	if (opponent == 'player-two' || opponent == 'cpu') {
 		playerObject.playerTwo.game.receiveAttack(coordinates);
 		nextPlayer = playerObject.playerOne.name;
-		// boardListener(playerObject, 'player-one');
 	} else {
 		playerObject.playerOne.game.receiveAttack(coordinates);
 		nextPlayer = playerObject.playerTwo.name;
-		// boardListener(playerObject, 'player-two');
 	}
 	removeBoard();
 	renderBothBoards(playerObject);
@@ -80,7 +81,6 @@ export function removeBoard() {
 }
 
 export function cpuPlays(playerObject) {
-	// debugger;
 	let opponent = playerObject.playerOne.game;
 	let opponentBoard = opponent.board;
 	let row = randomizeNumber();

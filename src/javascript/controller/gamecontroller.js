@@ -33,8 +33,8 @@ function possibleShipPositions(startCord, shipLength) {
 		[startRow, startCol + shipLength - 1],
 	];
 	for (let i = 0; i < plays.length; i++) {
-		let [x, y] = plays[i];
-		if (x > 9 || x < 0 || y > 9 || y < 0) {
+		let [row, col] = plays[i];
+		if (row > 9 || row < 0 || col > 9 || col < 0) {
 			plays.splice(i, 1);
 			i--;
 		}

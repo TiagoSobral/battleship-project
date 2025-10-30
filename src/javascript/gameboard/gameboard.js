@@ -7,24 +7,13 @@ export class gameBoard {
 	addShip(startCord, endCord, boatSize) {
 		invalidInput(startCord, endCord, boatSize);
 		let newShip = new Ship(boatSize);
-		let [startX, startY] = startCord;
-		let board = this.board;
-		let queue = [board[startX][startY]];
-		let direction = boatDirection(startCord, endCord);
-		while (queue.length != 0) {
-			squareUsed(queue[0]);
-			queue[0].value = newShip;
-			if (JSON.stringify([startX, startY]) != JSON.stringify(endCord)) {
-				if (direction == 'horizontal') {
-					startY = startY + 1;
-					queue.push(board[startX][startY]);
-				} else {
-					startX = startX + 1;
-					queue.push(board[startX][startY]);
-				}
-			}
-			queue.splice(0, 1);
-		}
+		let squares = path(startCord, endCord, boatSize);
+		squareUsed(squares, this.board);
+		squares.forEach((square) => {
+			let row = square[0];
+			let col = square[1];
+			this.board[row][col].value = newShip;
+		});
 		this.#boats.push(newShip);
 	}
 
@@ -59,17 +48,15 @@ function createBoard() {
 	return board;
 }
 
-function boatDirection(startCord, endCord) {
-	let [startX] = startCord;
-	let [endX] = endCord;
-
-	if (startX == endX) return 'horizontal';
-	return 'vertical';
-}
-
-function squareUsed(square) {
-	if (square.value != '')
-		throw new Error('Invalid Play, some squares or a square is being used!');
+function squareUsed(path, board) {
+	path.forEach((coordinate) => {
+		let row = coordinate[0];
+		let col = coordinate[1];
+		let square = board[row][col].value;
+		if (typeof square == 'object') {
+			throw new Error('Invalid Play, some squares or a square is being used!');
+		}
+	});
 }
 
 function invalidInput(startCord, endCord, boatSize) {
@@ -86,4 +73,19 @@ function invalidInput(startCord, endCord, boatSize) {
 		colLength > boatSize
 	)
 		throw new Error('Wrong input! Try Again!');
+}
+
+function path(startCord, endCord, boatSize) {
+	let queue = [startCord];
+	let path = [];
+	while (queue.length != 0 && path.length < boatSize) {
+		let [sRow, sCol] = startCord;
+		let [eRow, eCol] = endCord;
+		let [currRow, currCol] = queue[0];
+		path.push(queue[0]);
+		if (sRow < eRow) queue.push([currRow + 1, currCol]);
+		if (sCol < eCol) queue.push([currRow, currCol + 1]);
+		queue.splice(0, 1);
+	}
+	return path;
 }

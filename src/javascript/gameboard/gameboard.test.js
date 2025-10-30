@@ -7,17 +7,20 @@ describe('Game Board', () => {
 		expect(length).toBe(true);
 		expect(newBoard.board.length).toBe(10);
 		for (let i = 0; i < newBoard.board.length; i++) {
-			newBoard.board[i].every((column) => expect(column).toEqual({ value: '' }));
+			newBoard.board[i].every((column) =>
+				expect(column).toEqual({ value: '', hit: false })
+			);
 		}
 	});
 
 	it('Adds ship horizontally', () => {
+		debugger;
 		newBoard.addShip([0, 0], [0, 4], 5);
 		for (let i = 0; i < 5; i++) {
 			expect(newBoard.board[0][0 + i].value).toEqual({
-				length: 5,
 				timesHit: 0,
 				sunk: false,
+				length: 5,
 			});
 		}
 	});

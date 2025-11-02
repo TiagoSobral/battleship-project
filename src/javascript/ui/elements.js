@@ -55,3 +55,22 @@ export function removeBtns() {
 		btn.remove();
 	}
 }
+
+export function createDragShips() {
+	const gameSection = document.querySelector('.game-section');
+	const dragDropSection = document.createElement('div');
+	let shipSizes = [5, 4, 3, 3, 2];
+	dragDropSection.className = 'drag-drop-section';
+	gameSection.appendChild(dragDropSection);
+
+	shipSizes.forEach((element) => {
+		const shipContainer = document.createElement('ul');
+		shipContainer.setAttribute('draggable', 'true');
+		shipContainer.setAttribute('length', `${element}`);
+		dragDropSection.appendChild(shipContainer);
+		for (let i = 0; i < element; i++) {
+			const shipSquares = document.createElement('li');
+			shipContainer.appendChild(shipSquares);
+		}
+	});
+}

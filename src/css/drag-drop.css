@@ -1,0 +1,47 @@
+.drag-drop-section {
+	--border-settings: solid 1px #385e72;
+	--background-color: #cad9e3;
+	--border-radius-size: 10px;
+}
+
+.drag-drop-section {
+	display: flex;
+	gap: 3rem;
+}
+
+.drag-drop-section ul {
+	display: flex;
+	flex-direction: row;
+}
+
+.drag-drop-section li {
+	height: 35px;
+	width: 35px;
+	border-top: var(--border-settings);
+	border-bottom: var(--border-settings);
+	border-left: var(--border-settings);
+	background-color: var(--background-color);
+}
+
+.drag-drop-section li:last-of-type {
+	border-right: var(--border-settings);
+	border-top-right-radius: var(--border-radius-size);
+	border-bottom-right-radius: var(--border-radius-size);
+}
+
+.drag-drop-section li:first-of-type {
+	border-top-left-radius: var(--border-radius-size);
+	border-bottom-left-radius: var(--border-radius-size);
+}
+
+[length='4'] {
+	width: calc(35px * 4);
+}
+
+[length='3'] {
+	width: calc(35px * 3);
+}
+
+[length='2'] {
+	width: calc(35px * 2);
+}

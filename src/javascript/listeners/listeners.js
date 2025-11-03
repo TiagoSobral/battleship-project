@@ -139,6 +139,9 @@ export function dragDropListener(playerObject) {
 			event.preventDefault();
 			let player = event.target.parentElement.parentElement.className;
 			let shipSize = Number(event.dataTransfer.getData('text/plain'));
+			// removes the element once it is dropped
+			const shipElement = document.querySelector(`[length="${shipSize}"]`);
+			shipElement.remove();
 			dropAction(playerObject, player, shipSize, li);
 		});
 	}

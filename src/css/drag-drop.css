@@ -7,6 +7,8 @@
 .drag-drop-section {
 	display: flex;
 	gap: 3rem;
+	height: 10rem;
+	align-items: center;
 }
 
 .drag-drop-section ul {

@@ -41,7 +41,7 @@ export function menuSelectionListener() {
 			setPlayerInfoText(`Place your ships, Player One!`);
 			createBtn('Randomize', 'randomize-button', 'player-one');
 			randomizeBtnListener(players);
-			dragDropAction(players);
+			dragDropAction(players, 'player-one');
 		});
 	});
 }
@@ -67,7 +67,6 @@ export function randomizeBtnListener(playerObject) {
 
 function confirmBtnListener(playerObject) {
 	const confirmBtn = document.querySelector('.confirm-button');
-	let currentPlayer = confirmBtn.classList[1];
 	confirmBtn.addEventListener('click', () => {
 		let opponent = playerObject.playerTwo;
 		removeBoard();
@@ -77,17 +76,23 @@ function confirmBtnListener(playerObject) {
 			renderBothBoards(playerObject);
 			boardListener(playerObject, opponent.name);
 		} else {
-			if (currentPlayer == 'player-one') {
-				setPlayerInfoText(`Place your ships, Player Two!`);
-				createBtn('Randomize', 'randomize-button', 'player-two');
-				randomizeBtnListener(playerObject);
-			} else {
-				renderBoard(playerObject.playerOne);
-			}
-			renderBoard(opponent);
-			boardListener(playerObject, 'player-two');
+			confirmBtnActionForRealPlayers(playerObject, confirmBtn);
 		}
 	});
+}
+
+function confirmBtnActionForRealPlayers(playerObject, confirmBtnElement) {
+	let currentPlayer = confirmBtnElement.classList[1];
+	if (currentPlayer == 'player-one') {
+		renderBoard(playerObject.playerTwo);
+		setPlayerInfoText(`Place your ships, Player Two!`);
+		createBtn('Randomize', 'randomize-button', 'player-two');
+		randomizeBtnListener(playerObject);
+		dragDropAction(playerObject, 'player-two');
+	} else {
+		renderBothBoards(playerObject);
+		boardListener(playerObject, 'player-two');
+	}
 }
 
 export function customListener(element, callback) {
@@ -95,9 +100,9 @@ export function customListener(element, callback) {
 	domElement.addEventListener('click', callback);
 }
 
-function dragDropAction(playerObject) {
+function dragDropAction(playerObject, currentPlayer) {
 	// helper function for readability within listener
-	createDragShips();
+	createDragShips(currentPlayer);
 	dragStartListener();
 	hoverDragDropListener();
 	dragDropListener(playerObject);
@@ -139,10 +144,9 @@ export function dragDropListener(playerObject) {
 			event.preventDefault();
 			let player = event.target.parentElement.parentElement.className;
 			let shipSize = Number(event.dataTransfer.getData('text/plain'));
-			// removes the element once it is dropped
-			const shipElement = document.querySelector(`[length="${shipSize}"]`);
-			shipElement.remove();
 			dropAction(playerObject, player, shipSize, li);
+			updateElemAfterDrop(shipSize);
+			actionAfterShipsDropped(playerObject);
 		});
 	}
 }
@@ -186,18 +190,21 @@ function dropAction(playerObject, player, dataTransferred, element) {
 	playerObject.playerTwo.game.addShip(startCord, endCord, dataTransferred);
 }
 
-/* need to figure out a way to cover the opponents boats and the current player boats
-are visible.
+function updateElemAfterDrop(data) {
+	// debugger;
+	// removes the ship from the drag area and removes the randomize button so it can't be used.
+	const shipElement = document.querySelector(`[length="${data}"]`);
+	const randomizeBtn = document.querySelector('.randomize-button');
+	shipElement.remove();
+	if (randomizeBtn != null) randomizeBtn.remove();
+}
 
-also check condition for two players there is a mistake when calling cpuPlays, it needs to have a condition
-*/
-
-/*  COMMIT: PLAYING AGAINST TWO REAL PLAYERS WORKS
-
-THINGS TO CHECK: 
-- end game
-- perhaps create a function such as game or playRound again to handle the code without ifs
-- drag and drop tomorrow
-- buttons to restart game
-- cpu plays should check if cpu won
-*/
+function actionAfterShipsDropped(playerObject) {
+	const dragSection = document.querySelector('.drag-drop-section');
+	const shipsElement = dragSection.querySelectorAll('ul');
+	if (shipsElement.length == 0) {
+		createBtn('Confirm', 'confirm-button', dragSection.dataset.player);
+		confirmBtnListener(playerObject);
+		dragSection.remove();
+	}
+}

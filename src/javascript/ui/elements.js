@@ -56,11 +56,12 @@ export function removeBtns() {
 	}
 }
 
-export function createDragShips() {
+export function createDragShips(currentPlayer) {
 	const gameSection = document.querySelector('.game-section');
 	const dragDropSection = document.createElement('div');
 	let shipSizes = [5, 4, 3, 3, 2];
 	dragDropSection.className = 'drag-drop-section';
+	dragDropSection.setAttribute('data-player', currentPlayer);
 	gameSection.appendChild(dragDropSection);
 
 	shipSizes.forEach((element) => {

@@ -68,6 +68,7 @@ export function createDragShips(currentPlayer) {
 		const shipContainer = document.createElement('ul');
 		shipContainer.setAttribute('draggable', 'true');
 		shipContainer.setAttribute('length', `${element}`);
+		shipContainer.classList.add('horizontal');
 		dragDropSection.appendChild(shipContainer);
 		for (let i = 0; i < element; i++) {
 			const shipSquares = document.createElement('li');

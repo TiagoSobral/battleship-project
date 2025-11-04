@@ -12,7 +12,7 @@
 	align-content: center;
 	display: grid;
 	grid-template-columns: 1fr;
-	grid-template-rows: 0.8fr 3fr 1fr;
+	grid-template-rows: 0.8fr 3fr 0.7fr;
 	gap: 2rem;
 	align-items: center;
 	justify-items: center;

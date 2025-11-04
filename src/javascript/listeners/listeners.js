@@ -106,6 +106,7 @@ function dragDropAction(playerObject, currentPlayer) {
 	dragStartListener();
 	hoverDragDropListener();
 	dragDropListener(playerObject);
+	clickDraggableShipsListener();
 }
 
 export function dragStartListener() {
@@ -206,5 +207,19 @@ function actionAfterShipsDropped(playerObject) {
 		createBtn('Confirm', 'confirm-button', dragSection.dataset.player);
 		confirmBtnListener(playerObject);
 		dragSection.remove();
+	}
+}
+
+function clickDraggableShipsListener() {
+	const shipsElm = document.querySelectorAll('.drag-drop-section ul');
+	for (let ship of shipsElm) {
+		ship.addEventListener('click', () => {
+			let position = ship.className;
+			if (position == 'horizontal') {
+				ship.className = 'vertical';
+			} else {
+				ship.className = 'horizontal';
+			}
+		});
 	}
 }

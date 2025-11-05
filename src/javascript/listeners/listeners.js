@@ -41,7 +41,8 @@ export function menuSelectionListener() {
 			setPlayerInfoText(`Place your ships, Player One!`);
 			createBtn('Randomize', 'randomize-button', 'player-one');
 			randomizeBtnListener(players);
-			dragDropAction(players, 'player-one');
+			createDragShips('player-one');
+			dragDropAction(players);
 		});
 	});
 }
@@ -88,7 +89,8 @@ function confirmBtnActionForRealPlayers(playerObject, confirmBtnElement) {
 		setPlayerInfoText(`Place your ships, Player Two!`);
 		createBtn('Randomize', 'randomize-button', 'player-two');
 		randomizeBtnListener(playerObject);
-		dragDropAction(playerObject, 'player-two');
+		createDragShips('player-two');
+		dragDropAction(playerObject);
 	} else {
 		renderBothBoards(playerObject);
 		boardListener(playerObject, 'player-two');
@@ -100,9 +102,8 @@ export function customListener(element, callback) {
 	domElement.addEventListener('click', callback);
 }
 
-function dragDropAction(playerObject, currentPlayer) {
+function dragDropAction(playerObject) {
 	// helper function for readability within listener
-	createDragShips(currentPlayer);
 	dragStartListener();
 	hoverDragDropListener();
 	dragDropListener(playerObject);
@@ -135,11 +136,23 @@ export function hoverDragDropListener() {
 	}
 }
 
+function colorSiblings(colorCode, element) {
+	// helper function to change square colors to be used for dragenter and dragleave
+	const dragDropSection = document.querySelector('.drag-drop-section');
+	/* because dragenter and dragleave cannot access data-store, once a ship is activated
+	by dragstart that parent div gets a data-dragging = size of the ship */
+	let size = dragDropSection.dataset.dragging;
+	for (let i = 0; i < size; i++) {
+		element.style.backgroundColor = colorCode;
+		element = element.nextElementSibling;
+	}
+}
+
 export function dragDropListener(playerObject) {
 	const boardSquares = document.querySelectorAll('.gameboard li');
 	for (let li of boardSquares) {
 		li.addEventListener('dragover', (event) => {
-			event.preventDefault();
+			if (canBeDropped(li)) event.preventDefault();
 		});
 		li.addEventListener('drop', (event) => {
 			event.preventDefault();
@@ -152,16 +165,18 @@ export function dragDropListener(playerObject) {
 	}
 }
 
-function colorSiblings(colorCode, element) {
-	// helper function to change square colors to be used for dragenter and dragleave
-	const dragDropSection = document.querySelector('.drag-drop-section');
-	/* because dragenter and dragleave cannot access data-store, once a ship is activated
-	by dragstart that parent div gets a data-dragging = size of the ship */
-	let size = dragDropSection.dataset.dragging;
-	for (let i = 0; i < size; i++) {
-		element.style.backgroundColor = colorCode;
-		element = element.nextElementSibling;
+function canBeDropped(element) {
+	const shipSection = document.querySelector('.drag-drop-section');
+	let shipSize = shipSection.dataset.dragging;
+	let currentSquare = element;
+	for (let i = 0; i < shipSize; i++) {
+		if (currentSquare != null && currentSquare.attributes.ship == undefined) {
+			currentSquare = currentSquare.nextElementSibling;
+			continue;
+		}
+		return false;
 	}
+	return true;
 }
 
 function dropAction(playerObject, player, dataTransferred, element) {
@@ -182,13 +197,16 @@ function dropAction(playerObject, player, dataTransferred, element) {
 		(val) => Number(val)
 	);
 	if (player == 'player-one') {
-		return playerObject.playerOne.game.addShip(
-			startCord,
-			endCord,
-			dataTransferred
-		);
+		playerObject.playerOne.game.addShip(startCord, endCord, dataTransferred);
+		removeBoard();
+		renderBoard(playerObject.playerOne);
+		dragDropAction(playerObject);
+		return;
 	}
 	playerObject.playerTwo.game.addShip(startCord, endCord, dataTransferred);
+	removeBoard();
+	renderBoard(playerObject.playerTwo);
+	dragDropAction(playerObject);
 }
 
 function updateElemAfterDrop(data) {

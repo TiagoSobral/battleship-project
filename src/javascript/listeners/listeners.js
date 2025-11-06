@@ -115,7 +115,9 @@ export function dragStartListener() {
 	for (let ship of ships) {
 		ship.addEventListener('dragstart', (event) => {
 			let shipSize = event.target.childElementCount;
+			// the following information helps knowing information about the element while it is being dragged.
 			dragDropSection.setAttribute('data-dragging', `${shipSize}`);
+			dragDropSection.setAttribute('data-position', `${ship.className}`);
 			// the data that is set to be passed on will be the size of the ship
 			event.dataTransfer.setData('text/plain', shipSize);
 		});
@@ -134,29 +136,47 @@ export function dragLeaveListener() {
 }
 
 function colorSiblings(event, element) {
-	// debugger;
 	// helper function to change square colors to be used for dragenter and dragleave
 	const dragDropSection = document.querySelector('.drag-drop-section');
+	let size = dragDropSection.dataset.dragging;
+	let arrayOfElem = getArrayOfHoveredSquares(dragDropSection, element, size);
+	// if (event.type == 'dragover') {
+	if (size != arrayOfElem.length) {
+		arrayOfElem.forEach((elem) => elem.setAttribute('data-hover', 'unavailable'));
+	} else {
+		arrayOfElem.forEach((elem) => elem.setAttribute('data-hover', 'true'));
+	}
+	// }
+}
+
+function getArrayOfHoveredSquares(selector, element, size) {
 	/* because dragenter and dragleave cannot access data-store, once a ship is activated
 	by dragstart that parent div gets a data-dragging = size of the ship */
-	let size = dragDropSection.dataset.dragging;
 	let currentElem = element;
 	let arrayOfElem = [];
-	for (let i = 0; i < size; i++) {
-		if (currentElem != null) {
+	if (selector.className == 'horizontal') {
+		for (let i = 0; i < size; i++) {
+			if (currentElem != null) {
+				arrayOfElem.push(currentElem);
+				currentElem = currentElem.nextElementSibling;
+			}
+		}
+	} else {
+		/* to get the hovering array vertically we use the data-col value find the 
+		parentElement of the currentElement then find nextElementSibling and go down with the 
+		childrenNode[data-col] to find the next element */
+		let colNum = element.dataset.col;
+		for (let i = 0; i < size; i++) {
 			arrayOfElem.push(currentElem);
-			currentElem = currentElem.nextElementSibling;
+			let nextParentElement = currentElem.parentElement.nextElementSibling;
+			if (nextParentElement == null) {
+				break;
+			} else {
+				currentElem = nextParentElement.childNodes[colNum];
+			}
 		}
 	}
-	if (event.type == 'dragover') {
-		if (size != arrayOfElem.length) {
-			arrayOfElem.forEach((elem) =>
-				elem.setAttribute('data-hover', 'unavailable')
-			);
-		} else {
-			arrayOfElem.forEach((elem) => elem.setAttribute('data-hover', 'true'));
-		}
-	}
+	return arrayOfElem;
 }
 
 export function dragDropListener(playerObject) {

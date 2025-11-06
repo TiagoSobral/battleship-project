@@ -33,7 +33,6 @@ export function menuSelectionListener() {
 	const menuBtns = document.querySelectorAll('.selection-menu > *');
 	menuBtns.forEach((element) => {
 		element.addEventListener('click', () => {
-			// debugger;
 			let players = createPlayers(element.value);
 			cleanMainElement();
 			gameElements();
@@ -105,7 +104,7 @@ export function customListener(element, callback) {
 function dragDropAction(playerObject) {
 	// helper function for readability within listener
 	dragStartListener();
-	hoverDragDropListener();
+	dragLeaveListener();
 	dragDropListener(playerObject);
 	clickDraggableShipsListener();
 }
@@ -123,28 +122,40 @@ export function dragStartListener() {
 	}
 }
 
-export function hoverDragDropListener() {
+export function dragLeaveListener() {
 	// changes colors when hover to give impression of selection
 	const boardSquares = document.querySelectorAll('.gameboard li');
 	for (let li of boardSquares) {
-		li.addEventListener('dragenter', () => {
-			colorSiblings('#39779d86', li);
-		});
 		li.addEventListener('dragleave', () => {
-			colorSiblings('#cad9e3', li);
+			const squares = document.querySelectorAll('.gameboard [data-hover]');
+			squares.forEach((elem) => elem.removeAttribute('data-hover'));
 		});
 	}
 }
 
-function colorSiblings(colorCode, element) {
+function colorSiblings(event, element) {
+	// debugger;
 	// helper function to change square colors to be used for dragenter and dragleave
 	const dragDropSection = document.querySelector('.drag-drop-section');
 	/* because dragenter and dragleave cannot access data-store, once a ship is activated
 	by dragstart that parent div gets a data-dragging = size of the ship */
 	let size = dragDropSection.dataset.dragging;
+	let currentElem = element;
+	let arrayOfElem = [];
 	for (let i = 0; i < size; i++) {
-		element.style.backgroundColor = colorCode;
-		element = element.nextElementSibling;
+		if (currentElem != null) {
+			arrayOfElem.push(currentElem);
+			currentElem = currentElem.nextElementSibling;
+		}
+	}
+	if (event.type == 'dragover') {
+		if (size != arrayOfElem.length) {
+			arrayOfElem.forEach((elem) =>
+				elem.setAttribute('data-hover', 'unavailable')
+			);
+		} else {
+			arrayOfElem.forEach((elem) => elem.setAttribute('data-hover', 'true'));
+		}
 	}
 }
 
@@ -152,7 +163,10 @@ export function dragDropListener(playerObject) {
 	const boardSquares = document.querySelectorAll('.gameboard li');
 	for (let li of boardSquares) {
 		li.addEventListener('dragover', (event) => {
-			if (canBeDropped(li)) event.preventDefault();
+			if (canBeDropped(li)) {
+				event.preventDefault();
+			}
+			colorSiblings(event, li);
 		});
 		li.addEventListener('drop', (event) => {
 			event.preventDefault();
@@ -186,16 +200,7 @@ function dropAction(playerObject, player, dataTransferred, element) {
 		arrayOfSquares.push(element);
 		element = element.nextElementSibling;
 	}
-	let [startSquare] = arrayOfSquares;
-	let endSquare = arrayOfSquares[arrayOfSquares.length - 1];
-	// map here is used because dataset from the element returns a string.
-	let startCord = [
-		startSquare.parentElement.dataset.row,
-		startSquare.dataset.col,
-	].map((val) => Number(val));
-	let endCord = [endSquare.parentElement.dataset.row, endSquare.dataset.col].map(
-		(val) => Number(val)
-	);
+	let { startCord, endCord } = getCoordinatesFromDrop(arrayOfSquares);
 	if (player == 'player-one') {
 		playerObject.playerOne.game.addShip(startCord, endCord, dataTransferred);
 		removeBoard();
@@ -209,8 +214,21 @@ function dropAction(playerObject, player, dataTransferred, element) {
 	dragDropAction(playerObject);
 }
 
+function getCoordinatesFromDrop(arrayOfSquares) {
+	let [startSquare] = arrayOfSquares;
+	let endSquare = arrayOfSquares[arrayOfSquares.length - 1];
+	// map here is used because dataset from the element returns a string.
+	let startCord = [
+		startSquare.parentElement.dataset.row,
+		startSquare.dataset.col,
+	].map((val) => Number(val));
+	let endCord = [endSquare.parentElement.dataset.row, endSquare.dataset.col].map(
+		(val) => Number(val)
+	);
+	return { startCord, endCord };
+}
+
 function updateElemAfterDrop(data) {
-	// debugger;
 	// removes the ship from the drag area and removes the randomize button so it can't be used.
 	const shipElement = document.querySelector(`[length="${data}"]`);
 	const randomizeBtn = document.querySelector('.randomize-button');

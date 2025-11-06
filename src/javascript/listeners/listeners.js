@@ -69,8 +69,8 @@ function confirmBtnListener(playerObject) {
 	const confirmBtn = document.querySelector('.confirm-button');
 	confirmBtn.addEventListener('click', () => {
 		let opponent = playerObject.playerTwo;
-		removeBoard();
-		removeBtns();
+		cleanMainElement();
+		gameElements();
 		if (opponent.name == 'cpu') {
 			randomizeBoatsPosition(playerObject);
 			renderBothBoards(playerObject);
@@ -135,7 +135,7 @@ export function dragLeaveListener() {
 	}
 }
 
-function colorSiblings(event, element) {
+function colorSiblings(element) {
 	// helper function to change square colors to be used for dragenter and dragleave
 	const dragDropSection = document.querySelector('.drag-drop-section');
 	let size = dragDropSection.dataset.dragging;
@@ -152,9 +152,10 @@ function colorSiblings(event, element) {
 function getArrayOfHoveredSquares(selector, element, size) {
 	/* because dragenter and dragleave cannot access data-store, once a ship is activated
 	by dragstart that parent div gets a data-dragging = size of the ship */
+	let position = selector.dataset.position;
 	let currentElem = element;
 	let arrayOfElem = [];
-	if (selector.className == 'horizontal') {
+	if (position == 'horizontal') {
 		for (let i = 0; i < size; i++) {
 			if (currentElem != null) {
 				arrayOfElem.push(currentElem);
@@ -186,7 +187,7 @@ export function dragDropListener(playerObject) {
 			if (canBeDropped(li)) {
 				event.preventDefault();
 			}
-			colorSiblings(event, li);
+			colorSiblings(li);
 		});
 		li.addEventListener('drop', (event) => {
 			event.preventDefault();

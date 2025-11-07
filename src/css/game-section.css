@@ -35,7 +35,7 @@
 }
 
 .gameboard > div {
-	background: var(--background-color);
+	/* background: var(--background-color); */
 	box-shadow: 0rem 0.1rem 1rem 0.2rem #385e7227;
 }
 
@@ -94,32 +94,27 @@
 	list-style-type: none;
 	text-align: center;
 	align-content: center;
+	background-color: var(--background-color);
 }
 
 /* active styling */
 
-/* li:hover {
+li:hover {
 	background-color: #385e72;
 	color: aliceblue;
-} */
+}
 
 li:active {
 	scale: 0.98;
-}
-
-li[hit=''] {
-	background-color: var(--hit-ship-color);
 }
 
 li[ship=''] {
 	background-color: var(--ship-color);
 }
 
-.trial {
-	display: flex;
-	flex-direction: column;
-	gap: 2rem;
-	width: 100%;
+li[hit=''],
+[opponent] [hit] {
+	background-color: var(--hit-ship-color);
 }
 
 /* drag drop hover styling board settings */
@@ -130,4 +125,8 @@ li[ship=''] {
 
 [data-hover='unavailable'] {
 	background-color: darkred;
+}
+
+[opponent] li {
+	background-color: var(--background-color);
 }

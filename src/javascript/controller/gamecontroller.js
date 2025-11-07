@@ -8,7 +8,6 @@ export function createPlayers(playerTwoName = 'cpu') {
 }
 
 export function randomizeBoatsPosition(playerObject, player = 'cpu') {
-	debugger;
 	let playerGameBoard = playerObject.playerOne.game;
 	if (player != 'player-one') {
 		playerGameBoard = playerObject.playerTwo.game;

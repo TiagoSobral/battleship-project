@@ -47,9 +47,10 @@ function populateSquareInfo(square, element) {
 	}
 }
 
-export function renderBothBoards(playerObject) {
+export function renderBothBoards(playerObject, opponent) {
 	renderBoard(playerObject.playerOne);
 	renderBoard(playerObject.playerTwo);
+	identifyOpponentBoard(opponent);
 }
 
 export function playRound(playerObject, opponent, coordinates) {
@@ -62,7 +63,7 @@ export function playRound(playerObject, opponent, coordinates) {
 		nextPlayer = playerObject.playerTwo.name;
 	}
 	removeBoard();
-	renderBothBoards(playerObject);
+	renderBothBoards(playerObject, nextPlayer);
 	let endGame = isGameOver(playerObject, opponent);
 	if (endGame.gameOver) {
 		endGameActions(endGame.winner);
@@ -94,7 +95,7 @@ export function cpuPlays(playerObject) {
 	}
 	opponent.receiveAttack([row, col]);
 	removeBoard();
-	renderBothBoards(playerObject);
+	renderBothBoards(playerObject, 'cpu');
 	let isOver = isGameOver(playerObject, 'player-one');
 	if (!isOver.gameOver) {
 		boardListener(playerObject, 'cpu');
@@ -156,6 +157,11 @@ function returnToMainMenu() {
 	cleanMainElement();
 	menuSelection();
 	menuSelectionListener();
+}
+
+export function identifyOpponentBoard(player) {
+	const board = document.querySelector(`.${player}`);
+	board.setAttribute('opponent', '');
 }
 
 /* 

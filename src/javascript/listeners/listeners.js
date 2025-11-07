@@ -73,7 +73,7 @@ function confirmBtnListener(playerObject) {
 		gameElements();
 		if (opponent.name == 'cpu') {
 			randomizeBoatsPosition(playerObject);
-			renderBothBoards(playerObject);
+			renderBothBoards(playerObject, opponent.name);
 			boardListener(playerObject, opponent.name);
 		} else {
 			confirmBtnActionForRealPlayers(playerObject, confirmBtn);
@@ -91,7 +91,7 @@ function confirmBtnActionForRealPlayers(playerObject, confirmBtnElement) {
 		createDragShips('player-two');
 		dragDropAction(playerObject);
 	} else {
-		renderBothBoards(playerObject);
+		renderBothBoards(playerObject, 'player-two');
 		boardListener(playerObject, 'player-two');
 	}
 }

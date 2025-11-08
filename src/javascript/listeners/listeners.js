@@ -22,7 +22,10 @@ export function boardListener(playerObject, opponent = 'player-two') {
 	const allSquares = document.querySelectorAll(`.${opponent} li`);
 	allSquares.forEach((element) => {
 		element.addEventListener('click', () => {
-			if (element.textContent != 'X' && element.attributes.hit == undefined) {
+			if (
+				element.attributes.miss == undefined &&
+				element.attributes.hit == undefined
+			) {
 				let row = element.parentElement.dataset.row;
 				let col = element.dataset.col;
 				let coordinates = [row, col];

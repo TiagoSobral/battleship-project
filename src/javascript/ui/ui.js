@@ -8,6 +8,7 @@ import {
 import {
 	cleanMainElement,
 	createBtn,
+	createDragShips,
 	gameElements,
 	menuSelection,
 	setPlayerInfoText,
@@ -39,6 +40,8 @@ export function renderBoard(player) {
 function populateSquareInfo(square, element) {
 	if (typeof square.value == 'object') {
 		element.setAttribute('ship', '');
+	} else if (square.value == 'X') {
+		element.setAttribute('miss', '');
 	} else {
 		element.textContent = square.value;
 	}
@@ -158,6 +161,8 @@ function playAgain(opponent) {
 	setPlayerInfoText(`Place your ships, Player One!`);
 	createBtn('Randomize', 'randomize-button', 'player-one');
 	randomizeBtnListener(players);
+	createDragShips('player-one');
+	dragDropAction(players);
 }
 
 function returnToMainMenu() {

@@ -96,16 +96,24 @@
 	align-content: center;
 	background-color: var(--background-color);
 }
+/* 
+.button-section {
+	width: 100%;
+	justify-content: center;
+	align-content: center;
+} */
 
 /* active styling */
 
-li:hover {
-	background-color: #385e72;
-	color: aliceblue;
-}
-
 li:active {
 	scale: 0.98;
+}
+
+li[miss] {
+	background-image: url(../svgs/water.svg);
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position-y: 1px;
 }
 
 li[ship=''] {
@@ -114,7 +122,11 @@ li[ship=''] {
 
 li[hit=''],
 [opponent] [hit] {
-	background-color: var(--hit-ship-color);
+	/* background-color: var(--hit-ship-color); */
+	background-image: url(../svgs/fire.svg);
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position-y: 1px;
 }
 
 /* drag drop hover styling board settings */
@@ -129,4 +141,9 @@ li[hit=''],
 
 [opponent] li {
 	background-color: var(--background-color);
+}
+
+li:hover {
+	background-color: #385e72;
+	color: aliceblue;
 }

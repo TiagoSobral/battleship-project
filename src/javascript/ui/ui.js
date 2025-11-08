@@ -47,30 +47,36 @@ function populateSquareInfo(square, element) {
 	}
 }
 
-export function renderBothBoards(playerObject, opponent) {
+export function renderBothBoards(playerObject) {
 	renderBoard(playerObject.playerOne);
 	renderBoard(playerObject.playerTwo);
-	identifyOpponentBoard(opponent);
 }
 
 export function playRound(playerObject, opponent, coordinates) {
-	let nextPlayer;
-	if (opponent == 'player-two' || opponent == 'cpu') {
-		playerObject.playerTwo.game.receiveAttack(coordinates);
-		nextPlayer = playerObject.playerOne.name;
-	} else {
+	let nextOpponent;
+	let nextNameInfo;
+	if (opponent == 'player-one') {
 		playerObject.playerOne.game.receiveAttack(coordinates);
-		nextPlayer = playerObject.playerTwo.name;
+		nextOpponent = playerObject.playerTwo.name;
+		nextNameInfo = 'Player One';
+	} else {
+		playerObject.playerTwo.game.receiveAttack(coordinates);
+		nextOpponent = playerObject.playerOne.name;
+		nextNameInfo = 'Player Two';
 	}
-	removeBoard();
-	renderBothBoards(playerObject, nextPlayer);
-	let endGame = isGameOver(playerObject, opponent);
+
+	let endGame = isGameOver(playerObject);
 	if (endGame.gameOver) {
 		endGameActions(endGame.winner);
-	} else if (opponent != 'cpu') {
-		boardListener(playerObject, nextPlayer);
-	} else {
+	} else if (opponent == 'cpu') {
 		cpuPlays(playerObject);
+		setPlayerInfoText(`Drop you bomb, Player One`);
+	} else {
+		removeBoard();
+		renderBothBoards(playerObject);
+		hideBoatsOpponentBoard(nextOpponent);
+		boardListener(playerObject, nextOpponent);
+		setPlayerInfoText(`Drop you bomb, ${nextNameInfo}`);
 	}
 }
 
@@ -95,13 +101,14 @@ export function cpuPlays(playerObject) {
 	}
 	opponent.receiveAttack([row, col]);
 	removeBoard();
-	renderBothBoards(playerObject, 'cpu');
+	renderBothBoards(playerObject);
+
 	let isOver = isGameOver(playerObject, 'player-one');
-	if (!isOver.gameOver) {
-		boardListener(playerObject, 'cpu');
-	} else {
+	if (isOver.gameOver) {
 		return endGameActions('cpu');
 	}
+	hideBoatsOpponentBoard('cpu');
+	boardListener(playerObject, 'cpu');
 }
 
 export function randomizeNumber(max = 10, min = 1) {
@@ -159,7 +166,7 @@ function returnToMainMenu() {
 	menuSelectionListener();
 }
 
-export function identifyOpponentBoard(player) {
+export function hideBoatsOpponentBoard(player) {
 	const board = document.querySelector(`.${player}`);
 	board.setAttribute('opponent', '');
 }

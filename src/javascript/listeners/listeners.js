@@ -15,16 +15,21 @@ import {
 	removeBoard,
 	renderBothBoards,
 	playRound,
+	hideBoatsOpponentBoard,
 } from '../ui/ui.js';
 
 export function boardListener(playerObject, opponent = 'player-two') {
 	const allSquares = document.querySelectorAll(`.${opponent} li`);
 	allSquares.forEach((element) => {
 		element.addEventListener('click', () => {
-			let row = element.parentElement.dataset.row;
-			let col = element.dataset.col;
-			let coordinates = [row, col];
-			playRound(playerObject, opponent, coordinates);
+			if (element.textContent != 'X' && element.attributes.hit == undefined) {
+				let row = element.parentElement.dataset.row;
+				let col = element.dataset.col;
+				let coordinates = [row, col];
+				playRound(playerObject, opponent, coordinates);
+			} else {
+				setPlayerInfoText(`Play Again!`);
+			}
 		});
 	});
 }
@@ -73,8 +78,10 @@ function confirmBtnListener(playerObject) {
 		gameElements();
 		if (opponent.name == 'cpu') {
 			randomizeBoatsPosition(playerObject);
-			renderBothBoards(playerObject, opponent.name);
+			renderBothBoards(playerObject);
+			hideBoatsOpponentBoard(opponent.name);
 			boardListener(playerObject, opponent.name);
+			setPlayerInfoText(`Drop your bomb, Player One!`);
 		} else {
 			confirmBtnActionForRealPlayers(playerObject, confirmBtn);
 		}
@@ -91,8 +98,10 @@ function confirmBtnActionForRealPlayers(playerObject, confirmBtnElement) {
 		createDragShips('player-two');
 		dragDropAction(playerObject);
 	} else {
-		renderBothBoards(playerObject, 'player-two');
+		renderBothBoards(playerObject);
+		hideBoatsOpponentBoard('player-two');
 		boardListener(playerObject, 'player-two');
+		setPlayerInfoText(`Drop your bomb, Player One!`);
 	}
 }
 

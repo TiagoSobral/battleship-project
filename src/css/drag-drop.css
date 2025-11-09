@@ -2,14 +2,27 @@
 	--border-settings: solid 1px #385e72;
 	--background-color: #cad9e3;
 	--border-radius-size: 10px;
+	--main-letter-color: #385e72;
 }
 
 .drag-drop-section {
 	display: flex;
-	gap: 2rem;
+	flex-direction: column;
+	gap: 1rem;
 	width: 100%;
 	justify-content: center;
 	align-items: center;
+}
+
+legend {
+	color: var(--main-letter-color);
+	font-weight: 700;
+	font-size: large;
+}
+
+.ships {
+	display: flex;
+	gap: 2rem;
 }
 
 .drag-drop-section ul {
@@ -17,7 +30,6 @@
 	height: 13rem;
 	justify-content: center;
 	align-items: center;
-	margin: 1rem;
 }
 
 .drag-drop-section li {

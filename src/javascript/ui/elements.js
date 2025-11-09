@@ -59,17 +59,23 @@ export function removeBtns() {
 export function createDragShips(currentPlayer) {
 	const gameSection = document.querySelector('.game-section');
 	const dragDropSection = document.createElement('div');
+	const instructions = document.createElement('legend');
+	const ships = document.createElement('div');
 	let shipSizes = [5, 4, 3, 3, 2];
 	dragDropSection.className = 'drag-drop-section';
 	dragDropSection.setAttribute('data-player', currentPlayer);
+	instructions.textContent = 'Click the ship to change position!';
+	ships.classList.add('ships');
 	gameSection.appendChild(dragDropSection);
+	dragDropSection.appendChild(instructions);
+	dragDropSection.appendChild(ships);
 
 	shipSizes.forEach((element) => {
 		const shipContainer = document.createElement('ul');
 		shipContainer.setAttribute('draggable', 'true');
 		shipContainer.setAttribute('length', `${element}`);
 		shipContainer.classList.add('horizontal');
-		dragDropSection.appendChild(shipContainer);
+		ships.appendChild(shipContainer);
 		for (let i = 0; i < element; i++) {
 			const shipSquares = document.createElement('li');
 			shipContainer.appendChild(shipSquares);

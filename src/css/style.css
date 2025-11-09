@@ -9,7 +9,7 @@ header {
 
 body {
 	display: grid;
-	grid-template-rows: 6rem 4fr 5rem;
+	grid-template-rows: 6rem 65rem 5rem;
 	grid-template-columns: 1fr;
 	justify-items: center;
 	gap: 10px;

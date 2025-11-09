@@ -50,6 +50,7 @@ export function menuSelectionListener() {
 			randomizeBtnListener(players);
 			createDragShips('player-one');
 			dragDropAction(players);
+			clickDraggableShipsListener();
 		});
 	});
 }
@@ -100,6 +101,7 @@ function confirmBtnActionForRealPlayers(playerObject, confirmBtnElement) {
 		randomizeBtnListener(playerObject);
 		createDragShips('player-two');
 		dragDropAction(playerObject);
+		clickDraggableShipsListener();
 	} else {
 		renderBothBoards(playerObject);
 		hideBoatsOpponentBoard('player-two');
@@ -118,7 +120,6 @@ function dragDropAction(playerObject) {
 	dragStartListener();
 	dragLeaveListener();
 	dragDropListener(playerObject);
-	clickDraggableShipsListener();
 }
 
 export function dragStartListener() {
@@ -150,10 +151,9 @@ export function dragLeaveListener() {
 function colorSiblings(element) {
 	// helper function to change square colors to be used for dragenter and dragleave
 	const dragDropSection = document.querySelector('.drag-drop-section');
-	let size = dragDropSection.dataset.dragging;
-	let arrayOfElem = getArrayOfHoveredSquares(dragDropSection, element, size);
+	let arrayOfElem = getArrayOfHoveredSquares(element);
 	// if (event.type == 'dragover') {
-	if (size != arrayOfElem.length) {
+	if (dragDropSection.dataset.dragging != arrayOfElem.length) {
 		arrayOfElem.forEach((elem) => elem.setAttribute('data-hover', 'unavailable'));
 	} else {
 		arrayOfElem.forEach((elem) => elem.setAttribute('data-hover', 'true'));
@@ -161,10 +161,12 @@ function colorSiblings(element) {
 	// }
 }
 
-function getArrayOfHoveredSquares(selector, element, size) {
+function getArrayOfHoveredSquares(element) {
 	/* because dragenter and dragleave cannot access data-store, once a ship is activated
 	by dragstart that parent div gets a data-dragging = size of the ship */
-	let position = selector.dataset.position;
+	const dragDropSection = document.querySelector('.drag-drop-section');
+	let size = dragDropSection.dataset.dragging;
+	let position = dragDropSection.dataset.position;
 	let currentElem = element;
 	let arrayOfElem = [];
 	if (position == 'horizontal') {
@@ -202,11 +204,13 @@ export function dragDropListener(playerObject) {
 			colorSiblings(li);
 		});
 		li.addEventListener('drop', (event) => {
+			debugger;
 			event.preventDefault();
 			let player = event.target.parentElement.parentElement.className;
 			let shipSize = Number(event.dataTransfer.getData('text/plain'));
 			dropAction(playerObject, player, shipSize, li);
 			updateElemAfterDrop(shipSize);
+			clickDraggableShipsListener();
 			actionAfterShipsDropped(playerObject);
 		});
 	}
@@ -228,11 +232,7 @@ function canBeDropped(element) {
 
 function dropAction(playerObject, player, dataTransferred, element) {
 	// function to perform actions once ship is dropped.
-	let arrayOfSquares = [];
-	for (let i = 0; i < dataTransferred; i++) {
-		arrayOfSquares.push(element);
-		element = element.nextElementSibling;
-	}
+	let arrayOfSquares = getArrayOfHoveredSquares(element);
 	let { startCord, endCord } = getCoordinatesFromDrop(arrayOfSquares);
 	if (player == 'player-one') {
 		playerObject.playerOne.game.addShip(startCord, endCord, dataTransferred);

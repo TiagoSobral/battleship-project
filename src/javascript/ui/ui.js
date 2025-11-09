@@ -68,6 +68,8 @@ export function playRound(playerObject, opponent, coordinates) {
 		nextNameInfo = 'Player Two';
 	}
 
+	removeBoard();
+	renderBothBoards(playerObject);
 	let endGame = isGameOver(playerObject);
 	if (endGame.gameOver) {
 		endGameActions(endGame.winner);
@@ -75,8 +77,6 @@ export function playRound(playerObject, opponent, coordinates) {
 		cpuPlays(playerObject);
 		setPlayerInfoText(`Drop you bomb, Player One`);
 	} else {
-		removeBoard();
-		renderBothBoards(playerObject);
 		hideBoatsOpponentBoard(nextOpponent);
 		boardListener(playerObject, nextOpponent);
 		setPlayerInfoText(`Drop you bomb, ${nextNameInfo}`);

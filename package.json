@@ -1,5 +1,5 @@
 {
-	"name": "template-repository",
+	"name": "battleship-project",
 	"version": "1.0.0",
 	"main": "./src/javascript/index.js",
 	"scripts": {

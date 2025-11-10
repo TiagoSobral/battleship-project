@@ -8,11 +8,9 @@
 
 .game-section {
 	width: 100%;
-	height: 100%;
 	align-content: center;
-	display: grid;
-	grid-template-columns: 1fr;
-	grid-template-rows: 0.5fr 1fr 0.7fr;
+	display: flex;
+	flex-direction: column;
 	gap: 2rem;
 	align-items: center;
 	justify-items: center;
@@ -41,9 +39,10 @@
 
 .player-info {
 	font-weight: 600;
-	font-size: x-large;
+	font-size: large;
 	text-align: center;
 	color: #385e72;
+	/* margin: 1.5rem 0; */
 }
 
 .button-section {
@@ -96,14 +95,12 @@
 	align-content: center;
 	background-color: var(--background-color);
 }
-/* 
-.button-section {
-	width: 100%;
-	justify-content: center;
-	align-content: center;
-} */
 
 /* active styling */
+.gameboard li:hover {
+	background-color: #385e72;
+	color: aliceblue;
+}
 
 li:active {
 	scale: 0.98;
@@ -119,12 +116,7 @@ li[data-hover='unavailable'] {
 	background-color: darkred;
 }
 
-li:hover {
-	background-color: #385e72;
-	color: aliceblue;
-}
-
-[opponent] li {
+div[opponent] li {
 	background-color: var(--background-color);
 }
 
@@ -140,8 +132,7 @@ li[ship=''] {
 }
 
 li[hit=''],
-[opponent] [hit] {
-	/* background-color: var(--hit-ship-color); */
+div[opponent] [hit] {
 	background-image: url(../svgs/fire.svg);
 	background-size: contain;
 	background-repeat: no-repeat;

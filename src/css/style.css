@@ -3,13 +3,13 @@
 }
 
 header {
-	font-size: xx-large;
+	font-size: x-large;
 	font-weight: 800;
 }
 
 body {
 	display: grid;
-	grid-template-rows: 6rem 65rem 5rem;
+	grid-template-rows: 0.4fr 5fr 0.4fr;
 	grid-template-columns: 1fr;
 	justify-items: center;
 	gap: 10px;

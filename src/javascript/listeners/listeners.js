@@ -196,15 +196,16 @@ function getArrayOfHoveredSquares(element) {
 
 export function dragDropListener(playerObject) {
 	const boardSquares = document.querySelectorAll('.gameboard li');
+	const dragDropSection = document.querySelector('.drag-drop-section');
 	for (let li of boardSquares) {
 		li.addEventListener('dragover', (event) => {
-			if (canBeDropped(li)) {
+			let arrayOfSquares = getArrayOfHoveredSquares(event.currentTarget);
+			if (dragDropSection.dataset.dragging != arrayOfSquares) {
 				event.preventDefault();
 			}
 			colorSiblings(li);
 		});
 		li.addEventListener('drop', (event) => {
-			debugger;
 			event.preventDefault();
 			let player = event.target.parentElement.parentElement.className;
 			let shipSize = Number(event.dataTransfer.getData('text/plain'));
@@ -214,20 +215,6 @@ export function dragDropListener(playerObject) {
 			actionAfterShipsDropped(playerObject);
 		});
 	}
-}
-
-function canBeDropped(element) {
-	const shipSection = document.querySelector('.drag-drop-section');
-	let shipSize = shipSection.dataset.dragging;
-	let currentSquare = element;
-	for (let i = 0; i < shipSize; i++) {
-		if (currentSquare != null && currentSquare.attributes.ship == undefined) {
-			currentSquare = currentSquare.nextElementSibling;
-			continue;
-		}
-		return false;
-	}
-	return true;
 }
 
 function dropAction(playerObject, player, dataTransferred, element) {
@@ -282,13 +269,15 @@ function actionAfterShipsDropped(playerObject) {
 function clickDraggableShipsListener() {
 	const shipsElm = document.querySelectorAll('.drag-drop-section ul');
 	for (let ship of shipsElm) {
-		ship.addEventListener('click', () => {
-			let position = ship.className;
-			if (position == 'horizontal') {
-				ship.className = 'vertical';
-			} else {
-				ship.className = 'horizontal';
-			}
-		});
+		ship.addEventListener('click', setShipPosition);
+	}
+}
+
+function setShipPosition(event) {
+	let position = event.currentTarget;
+	if (position.className == 'horizontal') {
+		position.className = 'vertical';
+	} else {
+		position.className = 'horizontal';
 	}
 }
